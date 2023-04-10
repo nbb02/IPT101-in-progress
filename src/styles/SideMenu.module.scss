@@ -1,0 +1,69 @@
+.Menu {
+  padding: 2em;
+
+  > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin: 1em 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+}
+
+.menu-button {
+  right: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  margin-bottom: 4em;
+
+  > input,
+  &::before,
+  &::after {
+    content: "";
+    background-color: black;
+    border-radius: 0.25em;
+    height: 5px;
+  }
+
+  &::before {
+    width: 50px;
+  }
+  &::after {
+    width: 30px;
+  }
+  input {
+    width: 40px;
+  }
+
+  > input {
+    appearance: none;
+    margin: 0;
+    pointer-events: none;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .menu-button {
+    display: none;
+  }
+  .SideMenu {
+    position: absolute;
+    background-color: #ffffff77;
+    backdrop-filter: blur(10px);
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 1s;
+    padding: 6em 2em;
+  }
+}

@@ -1,0 +1,114 @@
+.AccountPage {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  height: 100vh;
+  padding: 0 10%;
+}
+
+.AccountBanner {
+  background-color: #ffda75;
+  border: 2px solid white;
+  border-radius: 0.25em;
+  height: 5em;
+  font-size: 2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > h1 {
+    margin: 0;
+  }
+}
+
+.AccountPage:has(input:checked) .SideMenuTab {
+  transform: translateX(0);
+}
+
+.menu-button-home {
+  width: max-content;
+  display: none;
+  right: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  z-index: 3;
+  position: fixed;
+  margin: 2em;
+  left: 0;
+
+  > input,
+  &::before,
+  &::after {
+    display: none;
+    transform-origin: left center;
+    content: "";
+    background-color: black;
+    border-radius: 0.25em;
+    height: 5px;
+    transition: width 1s, translate 1s, rotate 1s, opacity 1.2s;
+  }
+
+  &::before {
+    width: 50px;
+    translate: 0;
+  }
+  &::after {
+    width: 30px;
+    translate: 0;
+  }
+  input {
+    width: 40px;
+  }
+
+  > input {
+    appearance: none;
+    margin: 0;
+    pointer-events: none;
+  }
+}
+.menu-button-home:has(input:checked) input {
+  width: 0;
+  opacity: 0;
+}
+.menu-button-home:has(input:checked)::after {
+  rotate: -45deg;
+  translate: 0 3px;
+  width: 35px;
+}
+.menu-button-home:has(input:checked)::before {
+  rotate: 45deg;
+  translate: 0 -3px;
+  width: 35px;
+}
+
+@media screen and (max-width: 767px) {
+  .menu-button-home {
+    display: flex;
+
+    > input,
+    &::before,
+    &::after {
+      display: block;
+    }
+  }
+  .AccountPage {
+    grid-template-columns: auto;
+    padding: 0;
+  }
+  .SideMenuTab {
+    position: absolute;
+    background-color: #ffffff77;
+    backdrop-filter: blur(10px);
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 1s;
+    padding: 6em 2em;
+  }
+}
+
+@media screen and (min-width: 767px) and (max-width: 1024px) {
+  .AccountPage {
+    padding: 0 5%;
+  }
+}

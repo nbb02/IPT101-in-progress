@@ -1,0 +1,25 @@
+.HomePage {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  padding: 0 10%;
+}
+
+@media screen and (max-width: 767px) {
+  .HomePage {
+    grid-template-columns: auto;
+    padding: 0;
+  }
+  .OrdersTab {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 767px) and (max-width: 1024px) {
+  .HomePage {
+    grid-template-columns: auto;
+    padding: 0 5%;
+  }
+  .OrdersTab {
+    display: none;
+  }
+}

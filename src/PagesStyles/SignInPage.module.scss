@@ -1,0 +1,120 @@
+.SignInPage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: linear-gradient(to bottom right, rgb(0, 255, 200), violet);
+}
+
+.SignInCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  width: 50%;
+  padding: 2em;
+  border-radius: 1em;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  h1 {
+    color: white;
+  }
+
+  input {
+    padding: 1em;
+    height: 2.5em;
+    width: 60%;
+    border-radius: 1em;
+    border: 1px solid rgba(238, 238, 238, 0.452);
+    background-color: #ffffff7e;
+  }
+
+  > button {
+    background-color: white;
+    width: 60%;
+    height: 2.5em;
+    border-radius: 5em;
+    font-weight: bold;
+    font-size: 1em;
+    border: none;
+  }
+
+  h5 {
+    margin: 0;
+    display: inline;
+
+    + button {
+      background: none;
+      border: none;
+      color: white;
+      font-weight: bold;
+    }
+  }
+}
+
+.SignUpCard {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  width: 50%;
+  padding: 2em;
+  border-radius: 1em;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  h1 {
+    color: white;
+  }
+
+  input {
+    padding: 1em;
+    height: 2.5em;
+    width: 60%;
+    border-radius: 1em;
+    border: 1px solid rgba(238, 238, 238, 0.452);
+    background-color: #ffffff7e;
+  }
+
+  h5 {
+    margin: 0;
+    display: inline;
+
+    + button {
+      background: none;
+      border: none;
+      color: white;
+      font-weight: bold;
+    }
+  }
+
+  > button {
+    background-color: white;
+    width: 60%;
+    height: 2.5em;
+    border-radius: 5em;
+    font-weight: bold;
+    font-size: 1em;
+    border: none;
+  }
+
+  > form {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 0.7em;
+    align-items: center;
+
+    > input {
+      width: 100%;
+    }
+  }
+}

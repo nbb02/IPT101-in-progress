@@ -1,0 +1,83 @@
+.AccountBanner {
+  background-color: #ffda75;
+  border: 2px solid white;
+  border-radius: 0.25em;
+  height: 5em;
+  font-size: 2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > h1 {
+    margin: 0;
+  }
+}
+
+.AccountSettingsContainer {
+  padding: 1em;
+}
+
+.AddressesContainer {
+  > :first-child {
+    border: 1px solid gray;
+    border-left: none;
+    border-right: none;
+  }
+
+  > :not(:first-child) {
+    border: 1px solid transparent;
+    border-bottom-color: gray;
+  }
+}
+
+.addButton {
+  background-color: #ffedba;
+  border-radius: 0.25em;
+  border: 1px solid gray;
+  margin: 0.25em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+  font-weight: bold;
+  font-size: 1.2em;
+
+  &:hover {
+    background-color: #ffda75;
+  }
+
+  > h2 {
+    margin: 0;
+  }
+
+  > input {
+    appearance: none;
+  }
+}
+
+.addButton:has(input:checked) + form {
+  display: flex;
+}
+
+.Addresses form {
+  display: none;
+  flex-direction: column;
+  gap: 0.25em;
+  > input {
+    height: 2.5em;
+  }
+}
+
+.eachAddress {
+  padding: 0.25em;
+
+  > :first-child {
+    font-weight: bold;
+    margin: 0;
+  }
+
+  > p:not(:first-child) {
+    margin: 0;
+  }
+}

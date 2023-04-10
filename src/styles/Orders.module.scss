@@ -1,0 +1,179 @@
+.Orders {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  gap: 0.25em;
+
+  footer {
+    padding: 0 1em 1em 1em;
+
+    p {
+      margin: 0;
+      padding: 0.25em;
+    }
+
+    > button {
+      width: 100%;
+      height: 3em;
+      border-radius: 0.5em;
+      font-size: 1.2em;
+      border: none;
+      background-color: #ffda75;
+    }
+  }
+}
+
+.OrdersBanner {
+  background-color: #ffda75;
+  border: 2px solid white;
+  border-radius: 0.25em;
+  text-align: center;
+  height: 5em;
+  font-size: 2em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.details {
+  position: relative;
+  border: 1px solid salmon;
+  border-radius: 0.25em;
+  padding: 0 1em;
+  padding-bottom: 0;
+  > p {
+    margin: 0;
+    padding: 0.25em;
+  }
+}
+
+.changeButton {
+  display: block;
+  margin-bottom: 0.25em;
+  border: 1px solid black;
+  padding: 0.2em;
+  border-radius: 0.25em;
+  text-align: center;
+  background-color: #ffeec0;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #ffda75;
+  }
+}
+
+.changeAddress {
+  position: absolute;
+  background-color: white;
+  width: 100%;
+  border: 1px solid salmon;
+  left: 0;
+  margin-top: 0.25em;
+  border-radius: 0.25em;
+  padding: 0.5em;
+  display: none;
+  flex-direction: column;
+  gap: 0.25em;
+
+  > p {
+    margin: 0;
+    text-align: center;
+  }
+
+  > div {
+    border: 2px solid salmon;
+    border-radius: 0.25em;
+    padding: 0.25em;
+
+    &:hover {
+      background-color: rgb(255, 245, 219);
+    }
+    > p {
+      margin: 0;
+    }
+  }
+}
+
+.OrdersContainer {
+  padding: 1em;
+}
+
+.noOrders {
+  background-color: #dbdbdb;
+  border-radius: 1.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.MyOrders {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+  grid-auto-rows: 10em;
+  gap: 0.5em;
+  padding: 0 1em;
+}
+
+.menuCards {
+  border: 2px solid salmon;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  display: grid;
+  grid-template: 1fr 1fr 1fr 1fr / 1fr 1fr;
+  align-items: center;
+  background-color: #fffaeb;
+
+  > :nth-child(2) {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  > p {
+    margin: 0;
+    text-align: center;
+  }
+
+  > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffda75;
+    border: none;
+    border-radius: 0.25em;
+    height: 100%;
+    font-size: 1.2em;
+  }
+
+  > img {
+    background-color: #ffda75;
+    grid-column: 1 / 2;
+    grid-row: 1 / 5;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.25em;
+    object-fit: cover;
+  }
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+
+  > p {
+    font-weight: bold;
+    margin: 0;
+  }
+
+  > button {
+    border: none;
+    font-size: 1.2em;
+    background-color: #ffeec0;
+  }
+}
