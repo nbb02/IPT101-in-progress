@@ -8,6 +8,7 @@ import Transactions from "./components/Transactions"
 import Transaction from "./components/Transaction"
 import Account from "./components/Account"
 import Admin from "./components/Admin"
+import NotFound from "./components/NotFound"
 
 function App() {
   return (
@@ -26,14 +27,7 @@ function App() {
         />
         <Route path="/Account" element={<Page element={<Account />} />} />
         <Route path="/Admin" element={<Page element={<Admin />} />} />
-        <Route
-          path="*"
-          element={
-            <h1>
-              Not Found <Link to="/Home">Home</Link>
-            </h1>
-          }
-        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   )

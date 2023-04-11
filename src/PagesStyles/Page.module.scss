@@ -1,6 +1,7 @@
 .Page {
   display: grid;
   grid-template-columns: 1fr 5fr;
+  height: 100vh;
 }
 .SideMenuTab {
   transition: translate 1s;
@@ -60,6 +61,10 @@
 }
 .Page:has(.HamburgerMenu > input:checked) .SideMenuTab {
   transform: translateX(0);
+}
+
+.PageContent {
+  overflow-y: auto;
 }
 
 @media screen and (max-width: 767px) {

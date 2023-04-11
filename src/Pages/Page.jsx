@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import SideMenu from "../components/SideMenu"
 import styles from "../PagesStyles/Page.module.scss"
 
