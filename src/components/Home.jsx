@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react"
-import SideMenu from "./SideMenu"
 import styles from "../styles/Home.module.scss"
 import { Context } from "../Context/Context"
 
@@ -14,13 +13,7 @@ function Home() {
 
   return (
     <div className={styles.MenuOrder}>
-      <div className={styles.SideMenu}>
-        <SideMenu />
-      </div>
       <div className={styles.Home}>
-        <label className={styles["menu-button-home"]}>
-          <input type="checkbox" />
-        </label>
         <div className={styles.top}>
           <h2>Citadel's Bistro</h2>
         </div>

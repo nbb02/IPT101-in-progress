@@ -1,33 +1,18 @@
-.OrdersPage {
+.Page {
   display: grid;
   grid-template-columns: 1fr 5fr;
-  height: 100vh;
-  position: relative;
-  padding: 0 10%;
 }
-
 .SideMenuTab {
   transition: translate 1s;
   z-index: 100;
 }
-
-.OrdersTab {
-  height: 100vh;
-  overflow: hidden;
-}
-
-.OrdersPage:has(.menu-button-home > input:checked) .SideMenuTab {
-  transform: translateX(0);
-}
-
-.menu-button-home {
+.HamburgerMenu {
   width: max-content;
   display: none;
   right: 10%;
-  display: flex;
   flex-direction: column;
   gap: 0.25em;
-  z-index: 200;
+  z-index: 999;
   position: fixed;
   margin: 2em;
   left: 0;
@@ -52,44 +37,34 @@
     width: 30px;
     translate: 0;
   }
-  input {
-    width: 40px;
-  }
-
   > input {
+    width: 40px;
     appearance: none;
     margin: 0;
     pointer-events: none;
   }
 }
-.menu-button-home:has(input:checked) input {
+.HamburgerMenu:has(input:checked) input {
   width: 0;
   opacity: 0;
 }
-.menu-button-home:has(input:checked)::after {
+.HamburgerMenu:has(input:checked)::after {
   rotate: -45deg;
   translate: 0 3px;
   width: 35px;
 }
-.menu-button-home:has(input:checked)::before {
+.HamburgerMenu:has(input:checked)::before {
   rotate: 45deg;
   translate: 0 -3px;
   width: 35px;
 }
+.Page:has(.HamburgerMenu > input:checked) .SideMenuTab {
+  transform: translateX(0);
+}
 
 @media screen and (max-width: 767px) {
-  .menu-button-home {
-    display: flex;
-
-    > input,
-    &::before,
-    &::after {
-      display: block;
-    }
-  }
-  .OrdersPage {
+  .Page {
     grid-template-columns: auto;
-    padding: 0;
   }
   .SideMenuTab {
     position: absolute;
@@ -100,10 +75,25 @@
     transition: transform 1s;
     padding: 6em 2em;
   }
+  .HamburgerMenu {
+    display: flex;
+
+    > input,
+    &::after,
+    &::before {
+      display: block;
+    }
+  }
 }
 
-@media screen and (min-width: 767px) and (max-width: 1024px) {
-  .OrdersPage {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .Page {
     padding: 0 5%;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .Page {
+    padding: 0 10%;
   }
 }

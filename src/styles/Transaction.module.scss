@@ -1,0 +1,70 @@
+.TransactionBanner {
+  background-color: #ffda75;
+  border: 2px solid white;
+  border-radius: 0.25em;
+  height: 5em;
+  font-size: 2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > h1 {
+    margin: 0;
+  }
+}
+
+.TransactionContainer {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  > p {
+    margin: 0;
+  }
+}
+
+.orders {
+  border-radius: 0.5em;
+  background-color: rgb(252, 252, 252);
+  border: 2px solid rgb(0, 0, 0);
+  margin: 1em;
+}
+
+.MyOrders {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+  grid-auto-rows: 10em;
+  gap: 0.5em;
+  padding: 1.5em;
+
+  > div {
+    border: 2px solid salmon;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    display: flex;
+    gap: 20px;
+  }
+
+  > image {
+    width: 50%;
+    flex-shrink: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.25em;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.25em;
+
+    p {
+      margin: 0;
+    }
+  }
+}

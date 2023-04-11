@@ -1,18 +1,9 @@
 .MenuOrder {
-  display: grid;
-  grid-template-columns: 1fr 5fr;
   height: 100vh;
-  min-width: 10em;
 }
 
 .Home {
   overflow-y: auto;
-}
-
-.MenuOrder:has(input:checked) .SideMenu {
-  display: block;
-  transform: translateX(0);
-  transition: transform 1s;
 }
 
 .menu-button-home {
@@ -167,15 +158,6 @@
   }
   .OrdersTab {
     display: none;
-  }
-  .SideMenu {
-    position: absolute;
-    background-color: #ffffff77;
-    backdrop-filter: blur(10px);
-    height: 100vh;
-    transform: translateX(-100%);
-    transition: transform 1s;
-    padding: 6em 2em;
   }
   .MenuOrder {
     grid-template-columns: auto;

@@ -1,0 +1,73 @@
+.TransactionsBanner {
+  background-color: #ffda75;
+  border: 2px solid white;
+  border-radius: 0.25em;
+  height: 5em;
+  font-size: 2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > h1 {
+    margin: 0;
+  }
+}
+
+.TransactionsContainer {
+  padding: 1em;
+  gap: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.transaction {
+  border: 2px solid salmon;
+  display: grid;
+  grid-template: 2em 4em 2em / repeat(6, 1fr);
+  padding: 1em;
+  border-radius: 0.25em;
+  width: 80%;
+  gap: 0.25em;
+
+  > p {
+    font-size: 1.5em;
+    margin: 0;
+    align-self: center;
+  }
+
+  > :first-child {
+    grid-column: span 3;
+    border-bottom: 2px solid rgb(128, 128, 128);
+  }
+
+  > :nth-child(2) {
+    grid-column: span 3;
+    border-bottom: 2px solid rgb(128, 128, 128);
+  }
+  > img {
+    grid-column: span 1;
+    height: 100%;
+    width: 100%;
+    border-radius: 0.25em;
+    object-fit: cover;
+  }
+
+  > :nth-child(4) {
+    grid-column: span 2;
+  }
+  > :nth-child(5) {
+    grid-column: span 2;
+  }
+  > :nth-child(6) {
+    grid-column: span 1;
+  }
+  > :nth-child(7) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: span 6;
+    border-top: 2px solid rgb(128, 128, 128);
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import styles from "../styles/Admin.module.scss"
 import { Context } from "../Context/Context"
-import TransactionsPage from "../Pages/TransactionsPage"
+import Transactions from "../components/Transactions"
 
 function Admin() {
   const { transactions } = useContext(Context)
@@ -11,7 +11,7 @@ function Admin() {
         <h1>ADMIN</h1>
       </div>
       <div>
-        <TransactionsPage />
+        <Transactions />
       </div>
     </div>
   )
