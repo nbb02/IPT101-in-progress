@@ -21,6 +21,9 @@ function Menu() {
         <li>
           <Link to="/Account">Account</Link>
         </li>
+        <li>
+          <Link to="/Admin">ADMIN</Link>
+        </li>
       </ul>
     </nav>
   )

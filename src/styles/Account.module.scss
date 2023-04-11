@@ -64,13 +64,24 @@
   display: none;
   flex-direction: column;
   gap: 0.25em;
+  padding: 1em;
+  border: 2px solid salmon;
+  border-radius: 0.25em;
   > input {
     height: 2.5em;
   }
 }
 
 .eachAddress {
-  padding: 0.25em;
+  padding: 1em;
+
+  > button {
+    border: 2px solid red;
+    border-radius: 0.25em;
+    color: rgb(255, 40, 40);
+    font-weight: bold;
+    background: none;
+  }
 
   > :first-child {
     font-weight: bold;

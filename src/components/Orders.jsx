@@ -13,19 +13,23 @@ function Orders() {
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const notEmpty = cart.length !== 0
   const isEmpty = cart.length === 0
-  const total = !isEmpty ? cart.map((obj) => obj.quantity * obj.price) : 0
-  const totalPrice = !isEmpty
-    ? total.reduce((total, value) => total + value)
+  const subTotal = !isEmpty
+    ? cart
+        .map((obj) => obj.quantity * obj.price)
+        .reduce((total, value) => total + value)
     : 0
+  const deliveryFee = !isEmpty ? 50 : 0
+  const totalPrice = !isEmpty ? subTotal + deliveryFee : 0
 
   function check() {
     const date = new Date()
     const newDeliveryDetails = {
       deliveryInfo,
-      status: "Processing",
+      status: "To Process",
       orderDate: date.toLocaleString(),
+      subTotal,
+      deliveryFee,
       totalPrice,
     }
     checkOut({ ...newDeliveryDetails, cart })
@@ -117,11 +121,11 @@ function Orders() {
         </div>
       )}
       <footer>
-        <p>Sub Total</p>
-        <p>Delivery Fee</p>
-        <p>Total: {totalPrice}</p>
+        <p>Sub Total : ₱ {subTotal}</p>
+        <p>Delivery Fee : ₱ {deliveryFee}</p>
+        <p>Total: ₱ {totalPrice}</p>
         <button
-          disabled={!notEmpty}
+          disabled={isEmpty}
           onClick={() => {
             setCart([])
             check()

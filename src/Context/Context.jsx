@@ -74,6 +74,7 @@ function ContextProvider({ children }) {
     return access
   }
 
+  //FOR CART
   const [cart, setCart] = useState([
     {
       id: 1,
@@ -127,7 +128,9 @@ function ContextProvider({ children }) {
       cart,
       orderDate: "4/10/2023",
       status: "Processing",
-      totalPrice: "200",
+      subTotal: "200",
+      deliveryFee: "50",
+      totalPrice: "250",
     },
   ])
 
@@ -177,6 +180,19 @@ function ContextProvider({ children }) {
     ])
   }
 
+  function cancelOrder(id) {
+    setTransactions((prevState) =>
+      prevState.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              status: "Cancelled",
+            }
+          : item
+      )
+    )
+  }
+
   return (
     <Context.Provider
       value={{
@@ -193,6 +209,7 @@ function ContextProvider({ children }) {
         myAddresses,
         handleAddressSubmit,
         deleteAddress,
+        cancelOrder,
       }}
     >
       {children}
