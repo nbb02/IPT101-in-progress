@@ -22,7 +22,7 @@ function Transaction() {
   if (!data) {
     return (
       <h1>
-        Not Found <Link to="Home">Home</Link>
+        Not Found <Link to="/">Home</Link>
       </h1>
     )
   }

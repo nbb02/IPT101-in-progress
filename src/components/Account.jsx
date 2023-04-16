@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import styles from "../styles/Account.module.scss"
 import { Context } from "../Context/Context"
 
@@ -45,10 +45,6 @@ function Account() {
     }
   }
 
-  useEffect(() => {
-    console.log(formData)
-  }, [formData])
-
   return (
     <div className={styles.Account}>
       <div className={styles.AccountBanner}>
@@ -57,10 +53,10 @@ function Account() {
       <div className={styles.AccountSettingsContainer}>
         <div className={styles.AccountSettings}>
           <h2>Account Settings</h2>
-          <p>Name</p>
-          <p>Email</p>
-          <p>UserName</p>
-          <p>ChangePassword</p>
+          <p>Name: Citadel's Bistro</p>
+          <p>Email: n******123@gmail.com</p>
+          <p>Username: Citadel</p>
+          <button>ChangePassword</button>
         </div>
         <div className={styles.Addresses}>
           <h2>My Addresses</h2>

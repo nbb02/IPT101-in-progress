@@ -4,74 +4,83 @@ import { useNavigate } from "react-router-dom"
 const Context = createContext()
 
 function ContextProvider({ children }) {
-  const OrderMenu = [
+  const [orderMenu, setOrderMenu] = useState([
     {
       id: 1,
-      name: "tosilog",
+      name: "Tocilog",
       time: "Breakfast",
       img: "https://i.ibb.co/1QmFFLJ/tosilog.jpg",
-      price: 100,
+      price: 60,
     },
     {
       id: 2,
-      name: "hotsilog",
+      name: "Hotsilog",
       time: "Breakfast",
       img: "https://i.ibb.co/R9ZRX8h/hotsilog.jpg",
-      price: 100,
+      price: 50,
     },
     {
       id: 3,
-      name: "tapsilog",
+      name: "Tapsilog",
       time: "Breakfast",
       img: "https://i.ibb.co/gJKqhLh/tapsilog.jpg",
-      price: 100,
+      price: 70,
     },
     {
       id: 4,
-      name: "goto",
+      name: "Goto",
       time: "Breakfast",
       img: "https://i.ibb.co/jMd2crK/goto.jpg",
-      price: 100,
+      price: 70,
     },
     {
       id: 5,
-      name: "fisball",
+      name: "Fisball",
       time: "Snacks",
       img: "https://i.ibb.co/XZ4Sjqz/fishball.jpg",
-      price: 100,
+      price: 10,
     },
     {
       id: 6,
-      name: "kikiam",
+      name: "Kikiam",
       time: "Snacks",
       img: "https://i.ibb.co/LP7jQq1/kikiam.jpg",
-      price: 100,
+      price: 10,
     },
     {
       id: 7,
-      name: "fries",
+      name: "Fries",
       time: "Snacks",
       img: "https://i.ibb.co/bbyjKvD/fries.jpg",
-      price: 100,
+      price: 10,
     },
-  ]
+  ])
+
+  function editOrderMenu(orderMenudata) {
+    setOrderMenu(orderMenudata)
+  }
+  console.log(orderMenu)
 
   //FOR LOGIN
   const [access, setAccess] = useState(false)
-  const users = [
+  const [users, setUsers] = useState([
     {
       user: "admin",
       pass: "admin",
     },
-  ]
-  function SignIn(obj) {
-    const { user, pass } = obj
+  ])
+  function signIn(signInData) {
+    const { user, pass } = signInData
 
     let access = users.find((obj) => obj.user === user && obj.pass === pass)
     if (access) {
       setAccess(true)
     }
     return access
+  }
+  function signUp(signUpData) {
+    setUsers((prevState) => [...prevState, { ...signUpData }])
+    console.log(users)
   }
 
   //FOR CART
@@ -196,20 +205,22 @@ function ContextProvider({ children }) {
   return (
     <Context.Provider
       value={{
-        OrderMenu,
+        orderMenu,
+        editOrderMenu,
         cart,
         setCart,
         addToCart,
         changeQuantity,
         checkOut,
         transactions,
-        SignIn,
+        signIn,
         users,
         access,
         myAddresses,
         handleAddressSubmit,
         deleteAddress,
         cancelOrder,
+        signUp,
       }}
     >
       {children}

@@ -1,0 +1,47 @@
+.menuCards {
+  border: 2px solid salmon;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  display: grid;
+  grid-template: 1fr 1fr 1fr 1fr / 1fr 1fr;
+  gap: 0.25em;
+  align-items: center;
+  background-color: #fffaeb;
+
+  :nth-child(2) {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  > p {
+    margin: 0;
+    text-align: center;
+  }
+
+  > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffda75;
+    border: none;
+    border-radius: 0.25em;
+    height: 100%;
+    font-size: 1.2em;
+  }
+
+  > img {
+    grid-area: 1 / 1 / 5 /2;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.25em;
+    object-fit: cover;
+  }
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+  grid-auto-rows: 10em;
+  gap: 0.5em;
+  padding: 1.5em;
+}

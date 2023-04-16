@@ -6,7 +6,7 @@ function NotFound() {
   return (
     <div className={styles.NotFound}>
       <h1>
-        Not Found <Link to="/Home">Home</Link>
+        Not Found <Link to="/">Home</Link>
       </h1>
     </div>
   )

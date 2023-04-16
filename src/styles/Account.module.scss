@@ -18,6 +18,22 @@
   padding: 1em;
 }
 
+.AccountSettings {
+  > *:not(:first-child):not(button) {
+    border-bottom: 1px solid #777;
+  }
+  > *:not(button) {
+    margin: 0;
+    padding: 0.25em;
+  }
+  > button {
+    margin: 0.5em;
+    border-radius: 0.25em;
+    background-color: #fff8e4;
+    border: 1px solid salmon;
+  }
+}
+
 .AddressesContainer {
   > :first-child {
     border: 1px solid gray;

@@ -10,7 +10,7 @@ function Menu() {
       </label>
       <ul>
         <li>
-          <Link to="/Home">Home</Link>
+          <Link to="/">Home</Link>
         </li>
         <li>
           <Link to="/Orders">My Orders</Link>

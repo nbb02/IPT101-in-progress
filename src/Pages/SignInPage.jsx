@@ -6,13 +6,34 @@ import { Context } from "../Context/Context"
 function SignInPage() {
   const [isSignIn, setSignIn] = useState(true)
   const navigate = useNavigate()
-  const { SignIn } = useContext(Context)
+  const { signIn, signUp } = useContext(Context)
+  const [signUpData, setSignUpData] = useState({
+    user: "",
+    pass: "",
+    firstName: "",
+    lastName: "",
+  })
 
   let username = useRef(null)
   let password = useRef(null)
 
   function hasAccess(obj) {
-    if (SignIn(obj)) navigate("/home")
+    if (signIn(obj)) navigate("/")
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target
+    console.log(signUpData)
+
+    setSignUpData((prevState) => {
+      return { ...prevState, [name]: value }
+    })
+  }
+
+  function handleSignUp(e) {
+    e.preventDefault()
+    signUp(signUpData)
+    navigate("/")
   }
 
   return (
@@ -55,15 +76,37 @@ function SignInPage() {
         <h1>Sign Up</h1>
         <form>
           <label htmlFor="">Username</label>
-          <input type="text" />
+          <input
+            type="text"
+            onChange={handleChange}
+            name="user"
+            value={signUpData.user}
+          />
           <label htmlFor="">Password</label>
-          <input type="text" />
+          <input
+            type="text"
+            onChange={handleChange}
+            name="pass"
+            value={signUpData.pass}
+          />
           <label htmlFor="">First name</label>
-          <input type="text" />
+          <input
+            type="text"
+            onChange={handleChange}
+            name="firstName"
+            value={signUpData.firstName}
+          />
           <label htmlFor="">Last name</label>
-          <input type="text" />
+          <input
+            type="text"
+            onChange={handleChange}
+            name="lastName"
+            value={signUpData.lastName}
+          />
+          <button type="submit" onClick={handleSignUp}>
+            Sign Up
+          </button>
         </form>
-        <button>Sign Up</button>
         <div>
           <h5>Already have an account ? </h5>
           <button onClick={() => setSignIn(!isSignIn)}>Sign In</button>

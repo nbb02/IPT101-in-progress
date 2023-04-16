@@ -97,16 +97,6 @@
     }
   }
 
-  > button {
-    background-color: white;
-    width: 60%;
-    height: 2.5em;
-    border-radius: 5em;
-    font-weight: bold;
-    font-size: 1em;
-    border: none;
-  }
-
   > form {
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -115,6 +105,17 @@
 
     > input {
       width: 100%;
+    }
+
+    > button {
+      background-color: white;
+      width: 100%;
+      height: 2.5em;
+      border-radius: 5em;
+      font-weight: bold;
+      font-size: 1em;
+      border: none;
+      grid-column: span 2;
     }
   }
 }

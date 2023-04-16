@@ -99,7 +99,7 @@ function Orders() {
       {cart.length === 0 ? (
         <div className={styles.noOrders}>
           <h2>No Orders Yet</h2>
-          <Link to="/Home">Order now</Link>
+          <Link to="/">Order now</Link>
         </div>
       ) : (
         <div className={styles.MyOrders}>

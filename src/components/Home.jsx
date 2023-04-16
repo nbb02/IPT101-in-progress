@@ -3,12 +3,12 @@ import styles from "../styles/Home.module.scss"
 import { Context } from "../Context/Context"
 
 function Home() {
-  const { OrderMenu, addToCart } = useContext(Context)
+  const { orderMenu, addToCart } = useContext(Context)
 
-  const [orderList, setOrderList] = useState(OrderMenu)
+  const [orderList, setOrderList] = useState(orderMenu)
 
   function filter(timeOfDay) {
-    setOrderList(OrderMenu.filter((item) => item.time === timeOfDay))
+    setOrderList(orderMenu.filter((item) => item.time === timeOfDay))
   }
 
   return (
