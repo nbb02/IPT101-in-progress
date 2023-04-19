@@ -1,19 +1,14 @@
 import React, { useContext } from "react"
 import styles from "../styles/Admin.module.scss"
 import { Context } from "../Context/Context"
-import Transactions from "../components/Transactions"
 import MenuEditor from "./MenuEditor"
 
 function Admin() {
-  const { transactions } = useContext(Context)
+  const { transactions, orderCompleted, cancelOrder } = useContext(Context)
   return (
     <div className={styles.Admin}>
       <div className={styles.AdminBanner}>
         <h1>ADMIN</h1>
-      </div>
-      <div>
-        <button>Transactions</button>
-        <button>Menu List</button>
       </div>
       <div className={styles.TransactionsContainer}>
         {transactions &&
@@ -39,19 +34,26 @@ function Admin() {
                       : `1 item `}
                     Total Price: ₱ {item.totalPrice}
                   </p>
-                  <button
-                    style={
-                      item.status === "To Process"
-                        ? { display: "block" }
-                        : { display: "none" }
-                    }
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      cancelOrder(item.id)
-                    }}
-                  >
-                    Cancel Order
-                  </button>
+                  {item.status === "To Process" && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        cancelOrder(item.id)
+                      }}
+                    >
+                      Cancel Order
+                    </button>
+                  )}
+                  {item.status === "Processing" && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        orderCompleted(item.id)
+                      }}
+                    >
+                      Order Completed
+                    </button>
+                  )}
                 </div>
               )
             })}

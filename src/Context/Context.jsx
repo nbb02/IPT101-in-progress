@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 const Context = createContext()
 
@@ -202,6 +201,19 @@ function ContextProvider({ children }) {
     )
   }
 
+  function orderCompleted(id) {
+    setTransactions((prevState) =>
+      prevState.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              status: "Completed",
+            }
+          : item
+      )
+    )
+  }
+
   return (
     <Context.Provider
       value={{
@@ -221,6 +233,7 @@ function ContextProvider({ children }) {
         deleteAddress,
         cancelOrder,
         signUp,
+        orderCompleted,
       }}
     >
       {children}
