@@ -18,6 +18,29 @@
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+  margin: 1em 0;
+
+  input {
+    padding: 0.5em;
+  }
+
+  > form {
+    width: 100%;
+    display: flex;
+    > input {
+      width: 100%;
+      border-radius: 0.5em;
+      border: 2px solid salmon;
+    }
+    > button {
+      border: 2px solid salmon;
+      border-radius: 0.5em;
+      margin-left: 0.5em;
+      padding: 0.5em;
+      color: salmon;
+      background-color: transparent;
+    }
+  }
 }
 
 .eachInquiry {
@@ -26,17 +49,79 @@
   display: flex;
   flex-direction: column;
   gap: 0.25em;
+  z-index: 5;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    border-left: 2px solid gray;
+    height: 100%;
+    width: 50%;
+    left: 1em;
+    z-index: -1;
+  }
+
+  input {
+    border-radius: 0.5em;
+    border: none;
+    background-color: #a5a5a5;
+    color: white;
+    padding: 0.5em;
+  }
+  button {
+    border-radius: 0.5em;
+    border: 1px solid salmon;
+    margin-left: 0.5em;
+    padding: 0.5em;
+  }
+
+  > :not(:first-child) {
+    position: relative;
+  }
+  > :not(:first-child)::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 5%;
+    top: 50%;
+    left: -1em;
+    border: 1px solid gray;
+  }
 
   > :first-child {
-    background-color: rgb(95, 96, 97);
+    background-color: #ffeebf;
     padding: 0.5em;
-    font-weight: bold;
+    border-radius: 0.25em;
+    color: black;
+
+    > :first-child {
+      font-weight: bold;
+    }
   }
 
   > :not(:first-child) {
     margin-left: 2em;
-    background-color: bisque;
+    background-color: #ffeebf;
     padding: 0.5em;
     color: black;
+    border-radius: 0.25em;
+
+    > :first-child {
+      font-weight: bold;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .inquiriesContainer {
+    padding: 0 0.2em;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .inquiriesContainer {
+    padding: 0 20%;
   }
 }

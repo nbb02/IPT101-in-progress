@@ -6,7 +6,6 @@ function Inquiries() {
   const { inquiries, setInquiries } = useContext(Context)
 
   const comment = useRef(null)
-  const [toReply, setToReply] = useState({ commentId: 0, reply: "" })
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -20,32 +19,42 @@ function Inquiries() {
         ...prevState,
       ])
     }
+    comment.current.value = ""
   }
 
-  function handleReply() {
-    if (toReply.reply.trim() !== "") {
+  function handleReply(e, id) {
+    let value = e.target.previousElementSibling.value
+    if (value.trim() !== "") {
       setInquiries((prevState) => {
         return prevState.map((item) =>
-          item.id === toReply.commentId
+          item.id === id
             ? {
                 ...item,
-                replies: [
-                  ...item.replies,
-                  { userName: "Citadel's Bistro", reply: toReply.reply },
-                ],
+                replies: item.replies
+                  ? [
+                      ...item.replies,
+                      {
+                        id: item.replies.length + 1,
+                        userName: "Citadel's Bistro",
+                        reply: value,
+                      },
+                    ]
+                  : [
+                      {
+                        id: 1,
+                        userName: "Citadel's Bistro",
+                        reply: value,
+                      },
+                    ],
               }
             : item
         )
       })
     }
-  }
-
-  function handleChange(e, id) {
-    setToReply({ commentId: id, reply: e.target.value })
+    e.target.previousElementSibling.value = ""
   }
 
   console.log(inquiries)
-  console.log(toReply)
 
   return (
     <div>
@@ -61,11 +70,10 @@ function Inquiries() {
                   <p>{item.userName}</p>
                   <p>{item.comment}</p>
 
-                  <input
-                    type="text"
-                    onChange={(e) => handleChange(e, item.id)}
-                  />
-                  <button onClick={() => handleReply()}>Reply</button>
+                  <input type="text" />
+                  <button onClick={(e) => handleReply(e, item.id)}>
+                    Reply
+                  </button>
                 </div>
 
                 {item.replies &&
