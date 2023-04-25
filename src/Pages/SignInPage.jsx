@@ -32,12 +32,22 @@ function SignInPage() {
 
   function handleSignUp(e) {
     e.preventDefault()
-    signUp(signUpData)
-    navigate("/")
+    const hasBlanks = Object.values(signUpData).some(
+      (item) => item.trim() === ""
+    )
+
+    if (!hasBlanks) {
+      signUp(signUpData)
+      navigate("/")
+    } else {
+      alert("Please fill up all blanks")
+    }
   }
 
   return (
     <div className={styles.SignInPage}>
+      <span className={styles.circle}></span>
+      <span className={styles.circle2}></span>
       <div
         className={styles.SignInCard}
         style={isSignIn ? { display: "flex" } : { display: "none" }}

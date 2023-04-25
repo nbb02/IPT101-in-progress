@@ -4,13 +4,36 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-image: linear-gradient(to bottom right, rgb(0, 255, 200), violet);
+  background-color: black;
+  overflow: hidden;
+}
+
+.circle {
+  height: 10em;
+  width: 10em;
+  border-radius: 50%;
+  background: radial-gradient(#ffda75, rgb(200, 0, 255));
+  position: absolute;
+  left: 18%;
+  top: 20%;
+}
+
+.circle2 {
+  height: 10em;
+  width: 10em;
+  border-radius: 50%;
+  background: radial-gradient(#ffda75, rgb(200, 0, 255));
+  position: absolute;
+  left: 65%;
+  top: 60%;
 }
 
 .SignInCard {
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: white;
   gap: 1em;
   width: 50%;
   padding: 2em;
@@ -21,8 +44,17 @@
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 
-  h1 {
+  > h1 {
     color: white;
+  }
+
+  > a {
+    text-decoration: none;
+    color: white;
+
+    &:hover {
+      color: salmon;
+    }
   }
 
   input {
@@ -36,12 +68,18 @@
 
   > button {
     background-color: white;
+    color: salmon;
     width: 60%;
     height: 2.5em;
     border-radius: 5em;
     font-weight: bold;
     font-size: 1em;
     border: none;
+
+    &:hover {
+      background-color: salmon;
+      color: white;
+    }
   }
 
   h5 {
@@ -53,6 +91,10 @@
       border: none;
       color: white;
       font-weight: bold;
+
+      &:hover {
+        color: salmon;
+      }
     }
   }
 }
@@ -62,6 +104,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: white;
   gap: 1em;
   width: 50%;
   padding: 2em;
@@ -94,6 +137,10 @@
       border: none;
       color: white;
       font-weight: bold;
+
+      &:hover {
+        color: salmon;
+      }
     }
   }
 
@@ -109,6 +156,7 @@
 
     > button {
       background-color: white;
+      color: salmon;
       width: 100%;
       height: 2.5em;
       border-radius: 5em;
@@ -116,6 +164,23 @@
       font-size: 1em;
       border: none;
       grid-column: span 2;
+
+      &:hover {
+        background-color: salmon;
+        color: white;
+      }
     }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .circle {
+    left: -10%;
+  }
+  .SignUpCard {
+    width: 95%;
+  }
+  .SignInCard {
+    width: 95%;
   }
 }

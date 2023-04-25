@@ -1,5 +1,6 @@
 import React from "react"
 import styles from "../styles/About.module.scss"
+import { Link } from "react-router-dom"
 
 function About() {
   return (
@@ -9,15 +10,17 @@ function About() {
       </div>
       <div className={styles.About}>
         <h2>Welcome to the CitaDel's Bistro</h2>
-
+        <p>We serve authentic Batangas cuisine</p>
+        <Link to="/">Show Menu</Link>
         <p>
-          #6 FV. Ileto Street Poblacion, San Ildefonso, Philippines, 3010
-          Address
+          Address : #6 FV. Ileto Street Poblacion, San Ildefonso, Philippines,
+          3010
         </p>
-        <p>0991 840 7554 Mobile</p>
-        <p>Open Hours : 8:00 am to 8:00 pm</p>
+
+        <p>Contact Number : 0991 840 7554 </p>
+        <p>Open Hours : 9:00 am to 5:00 pm</p>
         <a href="https://web.facebook.com/profile.php?id=100083633456266&sk=about">
-          Facebook Page
+          <i className="ri-facebook-circle-fill ri-2x"></i>
         </a>
       </div>
     </div>
