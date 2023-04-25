@@ -14,7 +14,7 @@ function Inquiries() {
       setInquiries((prevState) => [
         {
           id: prevState.length + 1,
-          userName: "Berresn05",
+          userName: "Citadel's Bistro",
           comment: comment.current.value,
         },
         ...prevState,
@@ -31,7 +31,7 @@ function Inquiries() {
                 ...item,
                 replies: [
                   ...item.replies,
-                  { userName: "reply", reply: toReply.reply },
+                  { userName: "Citadel's Bistro", reply: toReply.reply },
                 ],
               }
             : item
