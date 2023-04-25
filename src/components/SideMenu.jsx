@@ -25,6 +25,9 @@ function Menu() {
           <Link to="/About">About us</Link>
         </li>
         <li>
+          <Link to="/Inquiries">Inquiries</Link>
+        </li>
+        <li>
           <Link to="/Admin">ADMIN</Link>
         </li>
       </ul>

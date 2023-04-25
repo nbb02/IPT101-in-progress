@@ -31,6 +31,10 @@
     border-radius: 0.25em;
     background-color: #fff8e4;
     border: 1px solid salmon;
+
+    &:hover {
+      background-color: #ffda75;
+    }
   }
 }
 
@@ -97,6 +101,11 @@
     color: rgb(255, 40, 40);
     font-weight: bold;
     background: none;
+
+    &:hover {
+      background-color: red;
+      color: white;
+    }
   }
 
   > :first-child {

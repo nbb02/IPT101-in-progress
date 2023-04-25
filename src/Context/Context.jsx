@@ -214,6 +214,27 @@ function ContextProvider({ children }) {
     )
   }
 
+  //FOR INQUIRIES
+  const [inquiries, setInquiries] = useState([
+    {
+      id: 1,
+      userName: "Nberres",
+      comment: "What ingredients",
+      replies: [
+        { id: 1, userName: "Citadel's Bistro", reply: "beef pork soy sauce" },
+      ],
+    },
+    {
+      id: 2,
+      userName: "Nberres",
+      comment: "What ingredients?",
+      replies: [
+        { id: 1, userName: "Citadel's Bistro", reply: "beef pork soy sauce" },
+        { id: 2, userName: "Citadel's Bistro", reply: "beef pork soy sauce" },
+      ],
+    },
+  ])
+
   return (
     <Context.Provider
       value={{
@@ -234,6 +255,8 @@ function ContextProvider({ children }) {
         cancelOrder,
         signUp,
         orderCompleted,
+        inquiries,
+        setInquiries,
       }}
     >
       {children}

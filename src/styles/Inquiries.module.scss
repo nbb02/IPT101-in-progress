@@ -1,0 +1,42 @@
+.Banner {
+  background-color: #ffda75;
+  border: 2px solid white;
+  border-radius: 0.25em;
+  height: 5em;
+  font-size: 2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > h1 {
+    margin: 0;
+  }
+}
+
+.inquiriesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.eachInquiry {
+  border-radius: 1em;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+
+  > :first-child {
+    background-color: rgb(95, 96, 97);
+    padding: 0.5em;
+    font-weight: bold;
+  }
+
+  > :not(:first-child) {
+    margin-left: 2em;
+    background-color: bisque;
+    padding: 0.5em;
+    color: black;
+  }
+}

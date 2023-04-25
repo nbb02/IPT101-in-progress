@@ -38,12 +38,15 @@
   > :nth-child(3) {
     display: inline-block;
     margin: auto;
-    background-color: #ffda75;
+    background-color: #ffe9ae;
     color: black;
     border-radius: 0.5em;
     margin: 2em;
     padding: 0.5em 2em;
     border: none;
+    &:hover {
+      background-color: #ffc936;
+    }
   }
   :nth-child(4) {
     > a {

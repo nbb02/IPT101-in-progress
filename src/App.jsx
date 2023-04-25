@@ -10,6 +10,7 @@ import Account from "./components/Account"
 import Admin from "./components/Admin"
 import NotFound from "./components/NotFound"
 import About from "./components/About"
+import Inquiries from "./components/Inquiries"
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         />
         <Route path="/Account" element={<Page element={<Account />} />} />
         <Route path="/About" element={<Page element={<About />} />} />
+        <Route path="/Inquiries" element={<Page element={<Inquiries />} />} />
         <Route path="/Admin" element={<Page element={<Admin />} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
