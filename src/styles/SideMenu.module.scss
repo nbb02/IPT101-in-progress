@@ -1,13 +1,22 @@
 .Menu {
-  padding: 2em;
-
   > ul {
     display: flex;
     flex-direction: column;
-    gap: 1em;
-    margin: 1em 0;
     padding: 0;
     list-style: none;
+    padding-top: 6em;
+
+    li {
+      a {
+        padding: 0.8em 2em;
+        display: block;
+        border-radius: 0.5em;
+
+        &:hover {
+          background-color: #ffe9ae;
+        }
+      }
+    }
   }
 
   * {
@@ -26,6 +35,9 @@
   flex-direction: column;
   gap: 0.25em;
   margin-bottom: 4em;
+  position: fixed;
+  left: 20%;
+  top: 5%;
 
   > input,
   &::before,
@@ -54,6 +66,11 @@
 }
 
 @media screen and (max-width: 767px) {
+  .Menu {
+    > ul {
+      padding-top: 1em;
+    }
+  }
   .menu-button {
     display: none;
   }

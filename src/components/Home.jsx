@@ -18,7 +18,7 @@ function Home() {
           <h2>Citadel's Bistro</h2>
         </div>
         <div className={styles.filter}>
-          <button onClick={() => setOrderList(OrderMenu)}>All</button>
+          <button onClick={() => setOrderList(orderMenu)}>All</button>
           <button onClick={() => filter("Breakfast")}>Breakfast</button>
           <button onClick={() => filter("Lunch")}>Lunch</button>
           <button onClick={() => filter("Dinner")}>Dinner</button>

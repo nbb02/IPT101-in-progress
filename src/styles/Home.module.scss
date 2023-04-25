@@ -94,6 +94,10 @@
     border: 2px solid salmon;
     background: none;
     color: saddlebrown;
+
+    &:hover {
+      background-color: #ffcd42;
+    }
   }
 }
 
@@ -129,11 +133,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffda75;
+    background-color: #ffe38f;
     border: none;
     border-radius: 0.25em;
     height: 100%;
     font-size: 1.2em;
+
+    &:hover {
+      background-color: #ffcd42;
+    }
   }
 
   > img {
