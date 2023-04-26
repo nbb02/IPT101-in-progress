@@ -27,7 +27,7 @@ function Home() {
         <div className={styles.menu}>
           {orderList &&
             orderList.map((food) => (
-              <div key={food.name} className={styles.menuCards}>
+              <div key={food.id} className={styles.menuCards}>
                 <img src={food.img} alt="" />
                 <p>{food.name.toUpperCase()}</p>
                 <p>{food.time}</p>

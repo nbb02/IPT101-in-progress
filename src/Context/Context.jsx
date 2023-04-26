@@ -239,6 +239,7 @@ function ContextProvider({ children }) {
     <Context.Provider
       value={{
         orderMenu,
+        setOrderMenu,
         editOrderMenu,
         cart,
         setCart,
