@@ -15,6 +15,24 @@
   }
 }
 
+.addItemBtn {
+  display: block;
+  margin: auto;
+  width: max-content;
+  border: 2px solid salmon;
+  padding: 0.5em;
+  border-radius: 0.5em;
+
+  &:hover {
+    background-color: salmon;
+  }
+
+  > input {
+    appearance: none;
+    margin: 0;
+  }
+}
+
 .menuCards {
   border: 2px solid salmon;
   border-radius: 0.5em;
@@ -25,7 +43,7 @@
   align-items: center;
   background-color: #fffaeb;
 
-  :nth-child(2) {
+  > :nth-child(2) {
     font-weight: bold;
     text-decoration: underline;
   }
@@ -35,15 +53,34 @@
     text-align: center;
   }
 
-  > button {
+  .button {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffda75;
-    border: none;
-    border-radius: 0.25em;
-    height: 100%;
-    font-size: 1.2em;
+    gap: 0.5em;
+    > button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffda75;
+      border: none;
+      border-radius: 0.25em;
+      height: 100%;
+      font-size: 0.8em;
+      padding: 0.5em;
+      border: 2px solid #ffda75;
+
+      &:hover {
+        background-color: #ffc72d;
+      }
+    }
+    > :nth-child(2) {
+      background-color: white;
+      color: red;
+      border: 2px solid red;
+      &:hover {
+        background-color: red;
+        color: white;
+      }
+    }
   }
 
   > img {
@@ -55,7 +92,8 @@
   }
 }
 
-.editCard {
+.editCard,
+.addItemCard {
   border: 2px solid salmon;
   border-radius: 0.5em;
   padding: 0.5em;
@@ -95,6 +133,15 @@
     object-fit: cover;
   }
 }
+.addItemCard {
+  display: none;
+  width: 50%;
+  margin: 1em auto 0 auto;
+}
+
+.addItemBtn:has(input:checked) + .addItemCard {
+  display: block;
+}
 
 .menu {
   display: grid;
@@ -102,4 +149,10 @@
   grid-auto-rows: 10em;
   gap: 0.5em;
   padding: 1.5em;
+}
+
+@media screen and (max-width: 767px) {
+  .addItemCard {
+    width: 90%;
+  }
 }

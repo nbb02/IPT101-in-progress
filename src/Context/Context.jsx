@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react"
+import React, { createContext, useEffect, useState } from "react"
 
 const Context = createContext()
 
@@ -101,6 +101,17 @@ function ContextProvider({ children }) {
       quantity: 1,
     },
   ])
+
+  useEffect(() => {
+    const notAvailable = orderMenu
+      .filter((item) => item.isAvailable === false)
+      .map((item) => item.id)
+
+    setCart((prevState) =>
+      prevState.filter((item) => !notAvailable.includes(item.id))
+    )
+    console.log(cart)
+  }, [orderMenu])
 
   const [myAddresses, setMyAddresses] = useState([
     {

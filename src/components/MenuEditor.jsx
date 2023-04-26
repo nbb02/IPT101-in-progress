@@ -27,6 +27,7 @@ function MenuEditor() {
   })
 
   function setImage(e) {
+    const file = e.target.files[0]
     setImg({
       picturePreview: file ? URL.createObjectURL(file) : "",
       pictureFile: file,
@@ -92,11 +93,23 @@ function MenuEditor() {
     })
   }
 
+  function deleteItem(id) {
+    setOrderMenu((prevState) =>
+      prevState.map((item) =>
+        item.id === id ? { ...item, isAvailable: false } : item
+      )
+    )
+    console.log(orderMenu)
+  }
+
   return (
     <div className={styles.MenuEditor}>
       <h2>Menu Editor</h2>
       <div>
-        <div className={styles.editCard}>
+        <label className={styles.addItemBtn}>
+          Add Item to The Menu <input type="checkbox" />
+        </label>
+        <div className={styles.addItemCard}>
           <img src={img.picturePreview} alt="" />
           <input
             type="file"
@@ -160,15 +173,20 @@ function MenuEditor() {
 
       <div className={styles.menu}>
         {orderMenu &&
-          orderMenu.map((food) => (
-            <div key={food.id} className={styles.menuCards}>
-              <img src={food.img} alt="" />
-              <p>{food.name.toString().toUpperCase()}</p>
-              <p>{food.time}</p>
-              <p>₱ {food.price}</p>
-              <button onClick={() => setToEdit(food)}>EDIT</button>
-            </div>
-          ))}
+          orderMenu
+            .filter((item) => item.isAvailable !== false)
+            .map((food) => (
+              <div key={food.id} className={styles.menuCards}>
+                <img src={food.img} alt="" />
+                <p>{food.name.toString().toUpperCase()}</p>
+                <p>{food.time}</p>
+                <p>₱ {food.price}</p>
+                <div className={styles.button}>
+                  <button onClick={() => setToEdit(food)}>EDIT</button>
+                  <button onClick={() => deleteItem(food.id)}>DELETE</button>
+                </div>
+              </div>
+            ))}
       </div>
     </div>
   )

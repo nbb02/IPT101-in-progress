@@ -2,8 +2,10 @@ import React, { useContext } from "react"
 import styles from "../styles/Admin.module.scss"
 import { Context } from "../Context/Context"
 import MenuEditor from "./MenuEditor"
+import { useNavigate } from "react-router-dom"
 
 function Admin() {
+  const navigate = useNavigate()
   const { transactions, orderCompleted, cancelOrder } = useContext(Context)
   return (
     <div className={styles.Admin}>

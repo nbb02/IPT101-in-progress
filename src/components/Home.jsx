@@ -26,17 +26,19 @@ function Home() {
         </div>
         <div className={styles.menu}>
           {orderList &&
-            orderList.map((food) => (
-              <div key={food.id} className={styles.menuCards}>
-                <img src={food.img} alt="" />
-                <p>{food.name.toUpperCase()}</p>
-                <p>{food.time}</p>
-                <p>₱ {food.price}</p>
-                <button onClick={() => addToCart(food)}>
-                  <i className="ri-shopping-cart-2-line"></i>
-                </button>
-              </div>
-            ))}
+            orderList
+              .filter((item) => item.isAvailable !== false)
+              .map((food) => (
+                <div key={food.id} className={styles.menuCards}>
+                  <img src={food.img} alt="" />
+                  <p>{food.name.toUpperCase()}</p>
+                  <p>{food.time}</p>
+                  <p>₱ {food.price}</p>
+                  <button onClick={() => addToCart(food)}>
+                    <i className="ri-shopping-cart-2-line"></i>
+                  </button>
+                </div>
+              ))}
         </div>
       </div>
     </div>
