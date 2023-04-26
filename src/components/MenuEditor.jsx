@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { Context } from "../Context/Context"
 import styles from "../styles/MenuEditor.module.scss"
 import axios from "axios"
 
 function MenuEditor() {
   const { orderMenu, editOrderMenu, setOrderMenu } = useContext(Context)
+
+  const imgRef = useRef()
 
   const [img, setImg] = useState({
     picturePreview: "",
@@ -15,7 +17,7 @@ function MenuEditor() {
     name: "",
     time: "",
     img: "",
-    price: 0,
+    price: "",
   })
 
   const [toEdit, setToEdit] = useState({
@@ -26,8 +28,8 @@ function MenuEditor() {
 
   function setImage(e) {
     setImg({
-      picturePreview: URL.createObjectURL(e.target.files[0]),
-      pictureFile: e.target.files[0],
+      picturePreview: file ? URL.createObjectURL(file) : "",
+      pictureFile: file,
     })
   }
 
@@ -53,8 +55,18 @@ function MenuEditor() {
           },
           ...prevState,
         ])
-        console.log(orderMenu)
-        console.log(res.data)
+
+        setImg({
+          picturePreview: "",
+          pictureFile: "",
+        })
+        setAddToMenu({
+          name: "",
+          time: "",
+          img: "",
+          price: "",
+        })
+        imgRef.current.value = ""
       })
   }
 
@@ -62,7 +74,6 @@ function MenuEditor() {
     const { name, value } = e.target
 
     setAddToMenu((prevState) => ({ ...prevState, [name]: value }))
-    console.log(addToMenu)
   }
 
   function handleChange(e) {
@@ -92,6 +103,7 @@ function MenuEditor() {
             name="img"
             placeholder="Image"
             onChange={setImage}
+            ref={imgRef}
           />
           <input
             type="text"
@@ -149,7 +161,7 @@ function MenuEditor() {
       <div className={styles.menu}>
         {orderMenu &&
           orderMenu.map((food) => (
-            <div key={food.name} className={styles.menuCards}>
+            <div key={food.id} className={styles.menuCards}>
               <img src={food.img} alt="" />
               <p>{food.name.toString().toUpperCase()}</p>
               <p>{food.time}</p>
