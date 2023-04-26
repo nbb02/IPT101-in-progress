@@ -1,25 +1,25 @@
-import React, { useContext, useRef, useState } from "react"
+import React, { useContext, useState } from "react"
 import styles from "../styles/Inquiries.module.scss"
 import { Context } from "../Context/Context"
 
 function Inquiries() {
   const { inquiries, setInquiries } = useContext(Context)
 
-  const comment = useRef(null)
+  const [comment, setComment] = useState({ data: "" })
 
   function handleSubmit(e) {
     e.preventDefault()
-    if (comment.current.value.trim() !== "") {
+    if (comment.data.trim() !== "") {
       setInquiries((prevState) => [
         {
           id: prevState.length + 1,
           userName: "Citadel's Bistro",
-          comment: comment.current.value,
+          comment: comment.data,
         },
         ...prevState,
       ])
     }
-    comment.current.value = ""
+    setComment({ data: "" })
   }
 
   function handleReply(e, id) {
@@ -54,8 +54,6 @@ function Inquiries() {
     e.target.previousElementSibling.value = ""
   }
 
-  console.log(inquiries)
-
   return (
     <div>
       <div className={styles.Banner}>
@@ -88,7 +86,11 @@ function Inquiries() {
             )
           })}
         <form onSubmit={handleSubmit}>
-          <input type="text" ref={comment} />
+          <input
+            type="text"
+            value={comment.data}
+            onChange={(e) => setComment({ data: e.target.value })}
+          />
           <button type="submit">Comment</button>
         </form>
       </div>
