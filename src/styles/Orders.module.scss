@@ -160,6 +160,39 @@
   }
 }
 
+.menuCards:has(> .sauce) {
+  grid-template: 1fr 1fr 1fr 1fr 1fr / 1fr 1fr;
+
+  > .sauce {
+    text-align: center;
+    padding: 0.2em;
+    border-radius: 0.25em;
+    border: 2px solid var(--main);
+    max-width: max-content;
+    margin: 0 auto;
+
+    > span {
+      display: inline-flex;
+      align-items: center;
+      text-align: center;
+      padding: 0.25em;
+      border: 2px solid var(--main);
+      border-radius: 0.25em;
+
+      &:hover {
+        background-color: var(--main);
+      }
+    }
+  }
+  > img {
+    grid-area: 1 / 1 / 6 /2;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.25em;
+    object-fit: cover;
+  }
+}
+
 .quantity {
   display: flex;
   align-items: center;

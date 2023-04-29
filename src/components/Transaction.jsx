@@ -46,12 +46,13 @@ function Transaction() {
         <div className={styles.orders}>
           <div className={styles.MyOrders}>
             {cart &&
-              cart.map((order) => (
-                <div key={order.name} className={styles.menuCards}>
+              cart.map((order, index) => (
+                <div key={index} className={styles.menuCards}>
                   {order.img && <img src={order.img} alt="" />}
                   <p>{order.name.toUpperCase()}</p>
                   <p>{order.time}</p>
                   <p>x {order.quantity}</p>
+                  {order.sauce && <p className={styles.sauce}>{order.sauce}</p>}
                   <p>₱ {order.price}</p>
                 </div>
               ))}

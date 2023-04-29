@@ -38,6 +38,7 @@ function ContextProvider({ children }) {
       time: "Snacks",
       img: "https://i.ibb.co/XZ4Sjqz/fishball.jpg",
       price: 10,
+      sauce: ["Sweet", "Salty", "Spicy"],
     },
     {
       id: 6,
@@ -45,6 +46,7 @@ function ContextProvider({ children }) {
       time: "Snacks",
       img: "https://i.ibb.co/LP7jQq1/kikiam.jpg",
       price: 10,
+      sauce: ["Sweet", "Salty", "Spicy"],
     },
     {
       id: 7,
@@ -52,13 +54,13 @@ function ContextProvider({ children }) {
       time: "Snacks",
       img: "https://i.ibb.co/bbyjKvD/fries.jpg",
       price: 10,
+      sauce: ["Ketchup", "Cheese Powder"],
     },
   ])
 
   function editOrderMenu(orderMenudata) {
     setOrderMenu(orderMenudata)
   }
-  console.log(orderMenu)
 
   //FOR LOGIN
   const [access, setAccess] = useState(false)
@@ -79,28 +81,10 @@ function ContextProvider({ children }) {
   }
   function signUp(signUpData) {
     setUsers((prevState) => [...prevState, { ...signUpData }])
-    console.log(users)
   }
 
   //FOR CART
-  const [cart, setCart] = useState([
-    {
-      id: 1,
-      name: "tosilog",
-      time: "Breakfast",
-      img: "https://i.ibb.co/1QmFFLJ/tosilog.jpg",
-      price: 100,
-      quantity: 1,
-    },
-    {
-      id: 2,
-      name: "hotsilog",
-      time: "Breakfast",
-      img: "https://i.ibb.co/R9ZRX8h/hotsilog.jpg",
-      price: 100,
-      quantity: 1,
-    },
-  ])
+  const [cart, setCart] = useState([])
 
   useEffect(() => {
     const notAvailable = orderMenu
@@ -110,7 +94,6 @@ function ContextProvider({ children }) {
     setCart((prevState) =>
       prevState.filter((item) => !notAvailable.includes(item.id))
     )
-    console.log(cart)
   }, [orderMenu])
 
   const [myAddresses, setMyAddresses] = useState([
@@ -144,7 +127,24 @@ function ContextProvider({ children }) {
     {
       id: 1,
       deliveryInfo: myAddresses[0],
-      cart,
+      cart: [
+        {
+          id: 1,
+          name: "tosilog",
+          time: "Breakfast",
+          img: "https://i.ibb.co/1QmFFLJ/tosilog.jpg",
+          price: 100,
+          quantity: 1,
+        },
+        {
+          id: 2,
+          name: "hotsilog",
+          time: "Breakfast",
+          img: "https://i.ibb.co/R9ZRX8h/hotsilog.jpg",
+          price: 100,
+          quantity: 1,
+        },
+      ],
       orderDate: "4/10/2023",
       status: "Processing",
       subTotal: "200",
@@ -161,10 +161,10 @@ function ContextProvider({ children }) {
   }
 
   function addToCart(food) {
-    cart.find((obj) => obj.name === food.name)
+    cart.find((obj) => obj.name === food.name && obj.sauce === food.sauce)
       ? setCart((prevState) =>
           prevState.map((obj) => {
-            return obj.name === food.name
+            return obj.name === food.name && obj.sauce === food.sauce
               ? { ...obj, quantity: obj.quantity + 1 }
               : obj
           })
@@ -246,6 +246,12 @@ function ContextProvider({ children }) {
     },
   ])
 
+  //FOR SAUCE
+  const preferredSauce = orderMenu
+    .filter((item) => item.sauce)
+    .map((item) => ({ id: item.id, sauce: item.sauce[0] }))
+  const [sauce, setSauce] = useState(preferredSauce)
+
   return (
     <Context.Provider
       value={{
@@ -269,6 +275,8 @@ function ContextProvider({ children }) {
         orderCompleted,
         inquiries,
         setInquiries,
+        sauce,
+        setSauce,
       }}
     >
       {children}

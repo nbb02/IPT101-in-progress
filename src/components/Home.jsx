@@ -3,8 +3,9 @@ import styles from "../styles/Home.module.scss"
 import { Context } from "../Context/Context"
 
 function Home() {
-  const { orderMenu, addToCart } = useContext(Context)
+  const { orderMenu, addToCart, sauce, setSauce } = useContext(Context)
 
+  console.log(sauce)
   const [orderList, setOrderList] = useState(orderMenu)
 
   function filter(timeOfDay) {
@@ -34,7 +35,45 @@ function Home() {
                   <p>{food.name.toUpperCase()}</p>
                   <p>{food.time}</p>
                   <p>₱ {food.price}</p>
-                  <button onClick={() => addToCart(food)}>
+
+                  {food.sauce && (
+                    <div className={styles.sauce}>
+                      {food.sauce.map((item, index) => (
+                        <span
+                          key={index}
+                          className={
+                            sauce.some(
+                              (sc) => sc.id === food.id && sc.sauce === item
+                            )
+                              ? styles.selectedSauce
+                              : ""
+                          }
+                          onClick={() =>
+                            setSauce((prevState) =>
+                              prevState.map((sitem) =>
+                                sitem.id === food.id
+                                  ? { ...sitem, sauce: item }
+                                  : sitem
+                              )
+                            )
+                          }
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    onClick={() =>
+                      food.sauce
+                        ? addToCart({
+                            ...food,
+                            sauce: sauce.find((scItem) => scItem.id === food.id)
+                              .sauce,
+                          })
+                        : addToCart(food)
+                    }
+                  >
                     <i className="ri-shopping-cart-2-line"></i>
                   </button>
                 </div>

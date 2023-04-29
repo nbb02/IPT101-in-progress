@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "../styles/Orders.module.scss"
 import { Link } from "react-router-dom"
 import { Context } from "../Context/Context"
@@ -103,12 +103,13 @@ function Orders() {
         </div>
       ) : (
         <div className={styles.MyOrders}>
-          {cart.map((order) => (
-            <div key={order.name} className={styles.menuCards}>
+          {cart.map((order, index) => (
+            <div key={index} className={styles.menuCards}>
               <img src={order.img} alt="" />
               <p>{order.name.toUpperCase()}</p>
               <p>{order.time}</p>
               <p>₱ {order.price}</p>
+              {order.sauce && <p className={styles.sauce}>{order.sauce}</p>}
               <div className={styles.quantity}>
                 <button onClick={() => changeQuantity(order)}>-</button>
                 <p>{order.quantity}</p>
