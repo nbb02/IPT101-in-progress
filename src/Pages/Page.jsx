@@ -7,12 +7,14 @@ function Page({ element, orderElement }) {
   const pageClassName = orderElement ? styles.withOrderTab : styles.Page
 
   const { cart } = useContext(Context)
-  const withOrderStyle =
-    cart.length > 0 ? {} : { gridTemplateColumns: "1fr 5fr" }
-  const orderTabStyle = cart.length > 0 ? {} : { display: "none" }
+  // const withOrderStyle =
+  //   cart.length > 0
+  //     ? { gridTemplateColumns: "auto" }
+  //     : { gridTemplateColumns: "1fr 5fr" }
+  // const orderTabStyle = cart.length > 0 ? {} : { display: "none" }
 
   return (
-    <div className={pageClassName} style={withOrderStyle}>
+    <div className={pageClassName}>
       <div className={styles.SideMenuTab}>
         <SideMenu />
       </div>
@@ -20,11 +22,7 @@ function Page({ element, orderElement }) {
         <input type="checkbox" />
       </label>
       <div className={styles.PageContent}>{element}</div>
-      {orderElement && (
-        <div className={styles.OrderTab} style={orderTabStyle}>
-          {orderElement}
-        </div>
-      )}
+      {orderElement && <div className={styles.OrderTab}>{orderElement}</div>}
     </div>
   )
 }
