@@ -1,8 +1,10 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Link } from "react-router-dom"
 import styles from "../styles/SideMenu.module.scss"
+import { Context } from "../Context/Context"
 
 function Menu() {
+  const { access } = useContext(Context)
   return (
     <nav className={styles.Menu}>
       <label className={styles["menu-button"]}>
@@ -27,9 +29,11 @@ function Menu() {
         <li>
           <Link to="/Inquiries">Inquiries</Link>
         </li>
-        <li>
-          <Link to="/Admin">ADMIN</Link>
-        </li>
+        {access.isAdmin && (
+          <li>
+            <Link to="/Admin">ADMIN</Link>
+          </li>
+        )}
       </ul>
     </nav>
   )

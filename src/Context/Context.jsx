@@ -63,11 +63,12 @@ function ContextProvider({ children }) {
   }
 
   //FOR LOGIN
-  const [access, setAccess] = useState(false)
+  const [access, setAccess] = useState({ access: false, isAdmin: false })
   const [users, setUsers] = useState([
     {
       user: "admin",
       pass: "admin",
+      isAdmin: true,
     },
   ])
   function signIn(signInData) {
@@ -75,12 +76,13 @@ function ContextProvider({ children }) {
 
     let access = users.find((obj) => obj.user === user && obj.pass === pass)
     if (access) {
-      setAccess(true)
+      setAccess({ access: true, isAdmin: access.isAdmin })
     }
     return access
   }
   function signUp(signUpData) {
     setUsers((prevState) => [...prevState, { ...signUpData }])
+    setAccess({ access: true, isAdmin: access.isAdmin })
   }
 
   //FOR CART

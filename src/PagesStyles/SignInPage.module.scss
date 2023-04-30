@@ -4,28 +4,35 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: black;
   overflow: hidden;
+  background-image: linear-gradient(to bottom right, var(--gray), var(--sub));
 }
 
 .circle {
   height: 10em;
   width: 10em;
   border-radius: 50%;
-  background: radial-gradient(#ffda75, rgb(200, 0, 255));
+  background: radial-gradient(#ffda75, salmon);
   position: absolute;
-  left: 18%;
-  top: 20%;
+  left: 20%;
+  top: 15%;
 }
 
 .circle2 {
   height: 10em;
   width: 10em;
   border-radius: 50%;
-  background: radial-gradient(#ffda75, rgb(200, 0, 255));
+  background: radial-gradient(#ffda75, salmon);
   position: absolute;
-  left: 65%;
-  top: 60%;
+  left: 70%;
+  top: 70%;
+}
+
+.SignInCard,
+.SignUpCard {
+  > img {
+    height: 10em;
+  }
 }
 
 .SignInCard {
@@ -33,24 +40,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: white;
+  color: black;
   gap: 1em;
   width: 50%;
   padding: 2em;
   border-radius: 1em;
-  background: rgba(255, 255, 255, 0.2);
+  background-color: rgba(130, 130, 130, 0.2);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 
-  > h1 {
-    color: white;
-  }
-
   > a {
     text-decoration: none;
-    color: white;
+    color: black;
 
     &:hover {
       color: salmon;
@@ -62,19 +65,19 @@
     height: 2.5em;
     width: 60%;
     border-radius: 1em;
-    border: 1px solid rgba(238, 238, 238, 0.452);
+    border: 2px solid salmon;
     background-color: #ffffff7e;
   }
 
   > button {
     background-color: white;
+    border: 2px solid salmon;
     color: salmon;
     width: 60%;
     height: 2.5em;
     border-radius: 5em;
     font-weight: bold;
     font-size: 1em;
-    border: none;
 
     &:hover {
       background-color: salmon;
@@ -89,7 +92,7 @@
     + button {
       background: none;
       border: none;
-      color: white;
+      color: black;
       font-weight: bold;
 
       &:hover {
@@ -104,19 +107,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: white;
+  color: black;
   gap: 1em;
   width: 50%;
   padding: 2em;
   border-radius: 1em;
-  background: rgba(255, 255, 255, 0.2);
+  background-color: rgba(130, 130, 130, 0.2);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 
   h1 {
-    color: white;
+    color: black;
   }
 
   input {
@@ -124,7 +127,7 @@
     height: 2.5em;
     width: 60%;
     border-radius: 1em;
-    border: 1px solid rgba(238, 238, 238, 0.452);
+    border: 2px solid salmon;
     background-color: #ffffff7e;
   }
 
@@ -135,7 +138,7 @@
     + button {
       background: none;
       border: none;
-      color: white;
+      color: black;
       font-weight: bold;
 
       &:hover {
@@ -157,12 +160,12 @@
     > button {
       background-color: white;
       color: salmon;
+      border: 2px solid salmon;
       width: 100%;
       height: 2.5em;
       border-radius: 5em;
       font-weight: bold;
       font-size: 1em;
-      border: none;
       grid-column: span 2;
 
       &:hover {
@@ -170,6 +173,12 @@
         color: white;
       }
     }
+  }
+}
+
+.google {
+  &:hover {
+    color: salmon;
   }
 }
 

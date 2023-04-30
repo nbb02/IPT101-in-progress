@@ -19,6 +19,9 @@ function SignInPage() {
 
   function hasAccess(obj) {
     if (signIn(obj)) navigate("/")
+    else {
+      alert("SignIn Failed")
+    }
   }
 
   function handleChange(e) {
@@ -52,6 +55,10 @@ function SignInPage() {
         className={styles.SignInCard}
         style={isSignIn ? { display: "flex" } : { display: "none" }}
       >
+        <img
+          src="https://i.ibb.co/FbYmSWK/295781324-106007968866648-7179000139374969956-n.jpg"
+          alt=""
+        />
         <h1>Sign In</h1>
         <label>Username</label>
         <input ref={username} type="text" />
@@ -68,6 +75,9 @@ function SignInPage() {
         >
           Sign In
         </button>
+        <span className={styles.google}>
+          <i className="ri-google-fill ri-2x"></i>
+        </span>
         <div>
           <h5>Dont have an account ? </h5>
           <button
@@ -83,6 +93,10 @@ function SignInPage() {
         className={styles.SignUpCard}
         style={isSignIn ? { display: "none" } : { display: "flex" }}
       >
+        <img
+          src="https://i.ibb.co/FbYmSWK/295781324-106007968866648-7179000139374969956-n.jpg"
+          alt=""
+        />
         <h1>Sign Up</h1>
         <form>
           <label htmlFor="">Username</label>
