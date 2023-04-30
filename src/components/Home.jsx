@@ -5,7 +5,6 @@ import { Context } from "../Context/Context"
 function Home() {
   const { orderMenu, addToCart, sauce, setSauce } = useContext(Context)
 
-  console.log(sauce)
   const [orderList, setOrderList] = useState(orderMenu)
 
   function filter(timeOfDay) {

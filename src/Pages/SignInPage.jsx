@@ -26,7 +26,6 @@ function SignInPage() {
 
   function handleChange(e) {
     const { name, value } = e.target
-    console.log(signUpData)
 
     setSignUpData((prevState) => {
       return { ...prevState, [name]: value }

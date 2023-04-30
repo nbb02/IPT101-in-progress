@@ -99,7 +99,6 @@ function MenuEditor() {
         item.id === id ? { ...item, isAvailable: false } : item
       )
     )
-    console.log(orderMenu)
   }
 
   return (
