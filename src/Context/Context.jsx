@@ -232,18 +232,18 @@ function ContextProvider({ children }) {
     {
       id: 1,
       userName: "Nberres",
-      comment: "What ingredients",
+      comment: "Where are you located?",
       replies: [
-        { id: 1, userName: "Citadel's Bistro", reply: "beef pork soy sauce" },
+        { id: 1, userName: "Citadel's Bistro", reply: "At San Ildefonso" },
       ],
     },
     {
       id: 2,
       userName: "Nberres",
-      comment: "What ingredients?",
+      comment: "What is the best seller",
       replies: [
-        { id: 1, userName: "Citadel's Bistro", reply: "beef pork soy sauce" },
-        { id: 2, userName: "Citadel's Bistro", reply: "beef pork soy sauce" },
+        { id: 1, userName: "Citadel's Bistro", reply: "Tocilog" },
+        { id: 2, userName: "Citadel's Bistro", reply: "Goto" },
       ],
     },
   ])
