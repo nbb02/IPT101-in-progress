@@ -63,7 +63,7 @@ function ContextProvider({ children }) {
   }
 
   //FOR LOGIN
-  const [access, setAccess] = useState({ access: true, isAdmin: true })
+  const [access, setAccess] = useState({ access: false, isAdmin: false })
   const [users, setUsers] = useState([
     {
       user: "admin",
