@@ -54,10 +54,9 @@
   }
 
   .button {
-    display: flex;
-    gap: 0.5em;
+    display: grid;
+    gap: 0.25em;
     > button {
-      display: flex;
       align-items: center;
       justify-content: center;
       background-color: #ffda75;
@@ -65,7 +64,7 @@
       border-radius: 0.25em;
       height: 100%;
       font-size: 0.8em;
-      padding: 0.5em;
+      padding: 0.25em;
       border: 2px solid #ffda75;
 
       &:hover {
@@ -104,6 +103,11 @@
   background-color: #fffaeb;
   margin: 0.5em;
 
+  > input {
+    border-radius: 0.25em;
+    border: 1px solid salmon;
+  }
+
   :nth-child(2) {
     font-weight: bold;
     text-decoration: underline;
@@ -122,7 +126,8 @@
     border: none;
     border-radius: 0.25em;
     height: 100%;
-    font-size: 1.2em;
+    font-size: 1em;
+    font-weight: bold;
   }
 
   > img {
@@ -140,7 +145,7 @@
 }
 
 .addItemBtn:has(input:checked) + .addItemCard {
-  display: block;
+  display: grid;
 }
 
 .menu {
@@ -149,6 +154,27 @@
   grid-auto-rows: 10em;
   gap: 0.5em;
   padding: 1.5em;
+}
+
+.isUnavailable {
+  position: relative;
+  filter: grayscale(50%);
+  &::after {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    content: "Unavailable!";
+    border: 2px solid red;
+    position: absolute;
+    height: 50%;
+    width: 80%;
+    border-radius: 0.5em;
+    background-color: var(--gray);
+    margin: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 @media screen and (max-width: 767px) {

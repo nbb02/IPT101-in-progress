@@ -93,13 +93,21 @@ function MenuEditor() {
     })
   }
 
-  function deleteItem(id) {
+  function setIsAvailable(id) {
     setOrderMenu((prevState) =>
       prevState.map((item) =>
-        item.id === id ? { ...item, isAvailable: false } : item
+        item.id === id
+          ? {
+              ...item,
+              isAvailable: "isAvailable" in item ? !item.isAvailable : false,
+            }
+          : item
       )
     )
   }
+  useEffect(() => {
+    console.log(orderMenu)
+  }, [orderMenu])
 
   return (
     <div className={styles.MenuEditor}>
@@ -172,20 +180,29 @@ function MenuEditor() {
 
       <div className={styles.menu}>
         {orderMenu &&
-          orderMenu
-            .filter((item) => item.isAvailable !== false)
-            .map((food) => (
-              <div key={food.id} className={styles.menuCards}>
-                <img src={food.img} alt="" />
-                <p>{food.name.toString().toUpperCase()}</p>
-                <p>{food.time}</p>
-                <p>₱ {food.price}</p>
-                <div className={styles.button}>
-                  <button onClick={() => setToEdit(food)}>EDIT</button>
-                  <button onClick={() => deleteItem(food.id)}>DELETE</button>
-                </div>
+          orderMenu.map((food) => (
+            <div
+              key={food.id}
+              className={`${styles.menuCards} ${
+                "isAvailable" in food && food.isAvailable === false
+                  ? styles.isUnavailable
+                  : ""
+              }`}
+            >
+              <img src={food.img} alt="" />
+              <p>{food.name.toString().toUpperCase()}</p>
+              <p>{food.time}</p>
+              <p>₱ {food.price}</p>
+              <div className={styles.button}>
+                <button onClick={() => setToEdit(food)}>Edit Item</button>
+                <button onClick={() => setIsAvailable(food.id)}>
+                  {"isAvailable" in food && food.isAvailable === false
+                    ? "Mark as Available"
+                    : `Mark as Unavailable`}
+                </button>
               </div>
-            ))}
+            </div>
+          ))}
       </div>
     </div>
   )

@@ -70,6 +70,12 @@
     grid-column: span 6;
     border-top: 2px solid rgb(128, 128, 128);
   }
+  > button {
+    background-color: #ffda75;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+  }
 
   &:hover {
     background-color: #fffbee;
