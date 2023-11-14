@@ -1,15 +1,9 @@
-import React, { useContext } from "react"
+import React from "react"
 import SideMenu from "../components/SideMenu"
 import styles from "../PagesStyles/Page.module.scss"
-import { Context } from "../Context/Context"
-import { useNavigate } from "react-router-dom"
 
 function Page({ element, orderElement }) {
   const pageClassName = orderElement ? styles.withOrderTab : styles.Page
-  const { access } = useContext(Context)
-  const navigate = useNavigate()
-
-  if (!access.access) navigate("/signin")
 
   return (
     <div className={pageClassName}>

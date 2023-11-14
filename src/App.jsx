@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import "../App.scss"
 import SignInPage from "./Pages/SignInPage"
 import Page from "./Pages/Page"
@@ -16,11 +16,11 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/SignIn" element={<SignInPage />} />
         <Route
           path="/"
           element={<Page element={<Home />} orderElement={<Orders />} />}
         />
+        <Route path="/SignIn" element={<SignInPage />} />
         <Route path="/Orders" element={<Page element={<Orders />} />} />
         <Route
           path="/Transactions"

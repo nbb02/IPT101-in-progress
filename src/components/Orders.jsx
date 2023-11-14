@@ -13,6 +13,13 @@ function Orders() {
 
   const [isOpen, setIsOpen] = useState(false)
 
+  const [paymentMethods, setPaymentMethods] = useState([
+    "Cash on Delivery",
+    "Gcash",
+    "Paymaya",
+  ])
+  const [selectedMethod, setSelectedMethod] = useState("Cash on Delivery")
+
   const isEmpty = cart.length === 0
   const subTotal = !isEmpty
     ? cart
@@ -124,7 +131,13 @@ function Orders() {
       <footer>
         <p>Sub Total : ₱ {subTotal}</p>
         <p>Delivery Fee : ₱ {deliveryFee}</p>
-        <p>Total: ₱ {totalPrice}</p>
+        <p>Total : ₱ {totalPrice}</p>
+        <label>Payment Method :</label>
+        <select name="" id="">
+          {paymentMethods.map((paymentMethod) => (
+            <option>{paymentMethod}</option>
+          ))}
+        </select>
         <button
           disabled={isEmpty}
           onClick={() => {
@@ -135,6 +148,7 @@ function Orders() {
           Checkout
         </button>
       </footer>
+      <div className={styles.payment}></div>
     </div>
   )
 }

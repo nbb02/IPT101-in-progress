@@ -8,39 +8,30 @@
   background-image: linear-gradient(to bottom right, var(--gray), var(--sub));
 }
 
-.circle {
-  height: 10em;
-  width: 10em;
-  border-radius: 50%;
-  background: radial-gradient(#ffda75, salmon);
-  position: absolute;
-  left: 20%;
-  top: 15%;
-}
-
+.circle,
 .circle2 {
   height: 10em;
   width: 10em;
   border-radius: 50%;
   background: radial-gradient(#ffda75, salmon);
   position: absolute;
+}
+.circle {
+  left: 20%;
+  top: 15%;
+}
+.circle2 {
   left: 70%;
   top: 70%;
 }
 
-.SignInCard,
-.SignUpCard {
-  > img {
-    height: 10em;
-  }
-}
-
-.SignInCard {
+.SignCard {
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: black;
+  text-align: center;
   gap: 1em;
   width: 50%;
   padding: 2em;
@@ -50,6 +41,14 @@
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);
+
+  > .x {
+    position: absolute;
+    right: 5em;
+  }
+  img {
+    height: 10em;
+  }
 
   > a {
     text-decoration: none;
@@ -63,110 +62,27 @@
   input {
     padding: 1em;
     height: 2.5em;
-    width: 60%;
+    width: 100%;
     border-radius: 1em;
     border: 2px solid salmon;
     background-color: #ffffff7e;
   }
 
-  > button {
-    background-color: white;
-    border: 2px solid salmon;
-    color: salmon;
-    width: 60%;
-    height: 2.5em;
-    border-radius: 5em;
-    font-weight: bold;
-    font-size: 1em;
-
-    &:hover {
-      background-color: salmon;
-      color: white;
-    }
-  }
-
-  h5 {
-    margin: 0;
-    display: inline;
-
-    + button {
-      background: none;
-      border: none;
-      color: black;
-      font-weight: bold;
-
-      &:hover {
-        color: salmon;
-      }
-    }
-  }
-}
-
-.SignUpCard {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: black;
-  gap: 1em;
-  width: 50%;
-  padding: 2em;
-  border-radius: 1em;
-  background-color: rgba(130, 130, 130, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-
-  h1 {
-    color: black;
-  }
-
-  input {
-    padding: 1em;
-    height: 2.5em;
-    width: 60%;
-    border-radius: 1em;
-    border: 2px solid salmon;
-    background-color: #ffffff7e;
-  }
-
-  h5 {
-    margin: 0;
-    display: inline;
-
-    + button {
-      background: none;
-      border: none;
-      color: black;
-      font-weight: bold;
-
-      &:hover {
-        color: salmon;
-      }
-    }
-  }
-
-  > form {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 0.7em;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
     align-items: center;
-
-    > input {
-      width: 100%;
-    }
-
+    padding-bottom: 1em;
     > button {
       background-color: white;
-      color: salmon;
       border: 2px solid salmon;
-      width: 100%;
+      color: salmon;
+      width: 60%;
       height: 2.5em;
       border-radius: 5em;
       font-weight: bold;
       font-size: 1em;
-      grid-column: span 2;
 
       &:hover {
         background-color: salmon;
@@ -174,7 +90,70 @@
       }
     }
   }
+
+  h5 {
+    margin: 0;
+    display: inline;
+
+    + button {
+      background: none;
+      border: none;
+      color: black;
+      font-weight: bold;
+
+      &:hover {
+        color: salmon;
+      }
+    }
+  }
 }
+
+// .SignUpCard {
+//   position: absolute;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   color: black;
+//   gap: 1em;
+//   width: 50%;
+//   padding: 2em;
+//   border-radius: 1em;
+//   background-color: rgba(130, 130, 130, 0.2);
+//   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+//   backdrop-filter: blur(5px);
+//   -webkit-backdrop-filter: blur(5px);
+//   border: 1px solid rgba(255, 255, 255, 0.3);
+
+//   h1 {
+//     color: black;
+//   }
+
+//   input,
+//   button {
+//     padding: 1em;
+//     height: 2.5em;
+//     width: 100%;
+//     border-radius: 1em;
+//     border: 2px solid salmon;
+//     background-color: #ffffff7e;
+//   }
+
+//   h5 {
+//     margin: 0;
+//     display: inline;
+
+//     + button {
+//       background: none;
+//       border: none;
+//       color: black;
+//       font-weight: bold;
+
+//       &:hover {
+//         color: salmon;
+//       }
+//     }
+//   }
+// }
 
 .google {
   &:hover {

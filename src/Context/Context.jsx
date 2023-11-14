@@ -84,6 +84,10 @@ function ContextProvider({ children }) {
     setUsers((prevState) => [...prevState, { ...signUpData }])
     setAccess({ access: true, isAdmin: access.isAdmin })
   }
+  function handleSignIn(acc, adm) {
+    console.log(adm)
+    setAccess((prevState) => ({ ...prevState, access: acc, isAdmin: adm }))
+  }
 
   //FOR CART
   const [cart, setCart] = useState([])
@@ -269,6 +273,7 @@ function ContextProvider({ children }) {
         signIn,
         users,
         access,
+        setAccess,
         myAddresses,
         handleAddressSubmit,
         deleteAddress,
@@ -279,6 +284,7 @@ function ContextProvider({ children }) {
         setInquiries,
         sauce,
         setSauce,
+        handleSignIn,
       }}
     >
       {children}

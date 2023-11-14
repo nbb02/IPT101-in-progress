@@ -9,6 +9,8 @@ function Admin() {
   const { transactions, orderCompleted, cancelOrder, access } =
     useContext(Context)
 
+  console.log(access)
+
   if (!access.isAdmin) navigate("/")
 
   return (

@@ -29,11 +29,15 @@ function Menu() {
         <li>
           <Link to="/Inquiries">Inquiries</Link>
         </li>
+
         {access.isAdmin && (
           <li>
             <Link to="/Admin">ADMIN</Link>
           </li>
         )}
+        <li>
+          <Link to="/SignIn">Sign In</Link>
+        </li>
       </ul>
     </nav>
   )
