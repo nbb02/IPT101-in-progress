@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import styles from "../styles/Orders.module.scss"
 import { Link } from "react-router-dom"
 import { Context } from "../Context/Context"
@@ -134,8 +134,8 @@ function Orders() {
         <p>Total : ₱ {totalPrice}</p>
         <label>Payment Method :</label>
         <select name="" id="">
-          {paymentMethods.map((paymentMethod) => (
-            <option>{paymentMethod}</option>
+          {paymentMethods.map((paymentMethod, index) => (
+            <option key={index}>{paymentMethod}</option>
           ))}
         </select>
         <button

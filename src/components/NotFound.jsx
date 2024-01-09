@@ -1,12 +1,11 @@
 import React, { useContext } from "react"
 import styles from "../styles/NotFound.module.scss"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Context } from "../Context/Context"
 
 function NotFound() {
-  const navigate = useNavigate()
-  const { access } = useContext(Context)
-  return access.access ? (
+  const { cookies } = useContext(Context)
+  return cookies ? (
     <div className={styles.NotFound}>
       <h1>
         Not Found <Link to="/">Home</Link>

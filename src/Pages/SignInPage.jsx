@@ -1,20 +1,23 @@
 import React, { useContext, useState } from "react"
 import styles from "../PagesStyles/SignInPage.module.scss"
 import { db } from "../Context/Firebase"
-import { getDocs, collection, query, where } from "firebase/firestore"
+import { getDocs, collection, query, where, addDoc } from "firebase/firestore"
 import { useNavigate } from "react-router-dom"
 import { Context } from "../Context/Context"
 
 function SignInPage() {
-  const [isSignIn, setSignIn] = useState(true)
-  const [signinData, setSignInData] = useState({ username: "", password: "" })
-  const navigate = useNavigate()
-  const { handleSignIn } = useContext(Context)
+  const [isSignedIn, setSignIn] = useState(true)
+  const [signInData, setSignInData] = useState({ username: "", password: "" })
 
-  function signUp() {}
+  const [signUpData, setSignUpData] = useState({ username: "", password: "" })
+  console.log(signUpData)
+
+  const navigate = useNavigate()
+
+  const { handleSignIn, setCookie } = useContext(Context)
 
   async function signIn() {
-    const { username, password } = signinData
+    const { username, password } = signInData
     let userData
     const q = query(
       collection(db, "Users"),
@@ -24,10 +27,31 @@ function SignInPage() {
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach((doc) => (userData = doc.data()))
     if (userData) {
-      handleSignIn(true, userData.isAdmin)
+      handleSignIn(username, userData.isAdmin)
       navigate("/")
     } else {
       alert("Sign in Failed : Check Email or Password")
+    }
+  }
+
+  async function signUp() {
+    const { username, password } = signUpData
+
+    let usernameData
+
+    const q = query(collection(db, "Users"), where("username", "==", username))
+    const querySnapshot = await getDocs(q)
+    querySnapshot.forEach((doc) => (usernameData = doc.data()))
+    console.log(usernameData)
+
+    if (!usernameData) {
+      console.log(usernameData)
+      await addDoc(collection(db, "Users"), { username, password })
+      console.log("sign up success")
+      setCookie("user", { username: username }, { path: "/" })
+      navigate("/")
+    } else {
+      alert("Number already existed")
     }
   }
 
@@ -45,29 +69,54 @@ function SignInPage() {
         />
         <div
           className={styles.SignUpBox}
-          style={isSignIn ? { display: "block" } : { display: "none" }}
+          style={isSignedIn ? { display: "block" } : { display: "none" }}
         >
           <h1>Sign Up</h1>
           <form>
             <label htmlFor="">Phone Number</label>
-            <input type="tel" />
+            <input
+              type="tel"
+              value={signUpData.username}
+              onChange={(e) => {
+                setSignUpData((prevState) => ({
+                  ...prevState,
+                  username: e.target.value,
+                }))
+              }}
+            />
             <label htmlFor="">Set Password</label>
-            <input type="text" />
-            <button>Sign Up</button>
+            <input
+              type="text"
+              value={signUpData.password}
+              onChange={(e) => {
+                setSignUpData((prevState) => ({
+                  ...prevState,
+                  password: e.target.value,
+                }))
+              }}
+            />
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                signUp()
+              }}
+            >
+              Sign Up
+            </button>
           </form>
           <div>
             <h5>Already have an account ? </h5>
-            <button onClick={() => setSignIn(!isSignIn)}>Sign In</button>
+            <button onClick={() => setSignIn(!isSignedIn)}>Sign In</button>
           </div>
         </div>
 
         <div
           className={styles.SignInBox}
-          style={!isSignIn ? { display: "block" } : { display: "none" }}
+          style={!isSignedIn ? { display: "block" } : { display: "none" }}
         >
           <h1>Sign In</h1>
           <form action="">
-            <label htmlFor="">Username/Phone Number</label>
+            <label htmlFor="">Phone Number</label>
             <input
               type="text"
               onChange={(e) => {
@@ -106,7 +155,7 @@ function SignInPage() {
             <h5>Dont have an account ? </h5>
             <button
               onClick={() => {
-                setSignIn(!isSignIn)
+                setSignIn(!isSignedIn)
               }}
             >
               Sign Up

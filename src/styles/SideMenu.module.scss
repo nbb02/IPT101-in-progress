@@ -1,4 +1,6 @@
-.Menu {
+nav {
+  position: relative;
+  height: 98vh;
   > ul {
     display: flex;
     flex-direction: column;
@@ -64,8 +66,17 @@
   }
 }
 
+nav > button {
+  position: absolute;
+  bottom: 0.5em;
+  left: 1em;
+  color: red;
+  padding: 1em;
+  width: 10em;
+}
+
 @media screen and (max-width: 767px) {
-  .Menu {
+  nav {
     > ul {
       padding-top: 1em;
     }

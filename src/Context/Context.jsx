@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react"
+import { useCookies } from "react-cookie"
 
 const Context = createContext()
 
@@ -63,30 +64,14 @@ function ContextProvider({ children }) {
   }
 
   //FOR LOGIN
-  const [access, setAccess] = useState({ access: false, isAdmin: false })
-  const [users, setUsers] = useState([
-    {
-      user: "admin",
-      pass: "admin",
-      isAdmin: true,
-    },
-  ])
-  function signIn(signInData) {
-    const { user, pass } = signInData
-
-    let access = users.find((obj) => obj.user === user && obj.pass === pass)
-    if (access) {
-      setAccess({ access: true, isAdmin: access.isAdmin })
-    }
-    return access
-  }
-  function signUp(signUpData) {
-    setUsers((prevState) => [...prevState, { ...signUpData }])
-    setAccess({ access: true, isAdmin: access.isAdmin })
-  }
+  const [cookies, setCookie, removeCookie] = useCookies()
   function handleSignIn(acc, adm) {
-    console.log(adm)
-    setAccess((prevState) => ({ ...prevState, access: acc, isAdmin: adm }))
+    setCookie("user", { username: acc, isAdmin: adm }, { path: "/" })
+    console.log(acc, adm)
+  }
+  function signOut() {
+    removeCookie("user")
+    window.location.reload()
   }
 
   //FOR CART
@@ -270,21 +255,19 @@ function ContextProvider({ children }) {
         changeQuantity,
         checkOut,
         transactions,
-        signIn,
-        users,
-        access,
-        setAccess,
         myAddresses,
         handleAddressSubmit,
         deleteAddress,
         cancelOrder,
-        signUp,
         orderCompleted,
         inquiries,
         setInquiries,
         sauce,
         setSauce,
         handleSignIn,
+        signOut,
+        cookies,
+        setCookie,
       }}
     >
       {children}
