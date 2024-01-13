@@ -1,11 +1,37 @@
-import React, { useContext } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import styles from "../styles/SideMenu.module.scss"
-import { Context } from "../Context/Context"
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
+import { doc, getDoc } from "firebase/firestore"
+import { db } from "../Context/Firebase"
 
 function Menu() {
-  const { cookies, signOut } = useContext(Context)
-  const { user } = cookies
+  const auth = getAuth()
+  const [SignedIn, setSignedIn] = useState(false)
+  const [hasPhone, setHasPhone] = useState(false)
+
+  function handleSignOut() {
+    signOut(auth)
+  }
+
+  function checkAuthState() {
+    onAuthStateChanged(auth, (user) => {
+      setSignedIn(user ? true : false)
+    })
+  }
+
+  async function checkPhone() {
+    if (!!auth.currentUser) {
+      const docRef = doc(db, "userDetails", auth.currentUser.uid)
+      const docSnap = await getDoc(docRef)
+      setHasPhone(docSnap.exists() && docSnap.data().phoneNumber ? true : false)
+    }
+  }
+
+  useEffect(() => {
+    checkAuthState()
+    checkPhone()
+  }, [hasPhone, SignedIn])
 
   return (
     <nav>
@@ -16,7 +42,7 @@ function Menu() {
         <li>
           <Link to="/">Home</Link>
         </li>
-        {user && (
+        {hasPhone && (
           <>
             <li>
               <Link to="/Orders">My Orders</Link>
@@ -35,18 +61,20 @@ function Menu() {
         <li>
           <Link to="/About">About us</Link>
         </li>
-        {cookies?.user?.isAdmin && (
+        {/* { && (
           <li>
             <Link to="/Admin">ADMIN</Link>
           </li>
-        )}
-        {!user && (
+        )} */}
+        {!hasPhone && (
           <li>
-            <Link to="/SignIn">Sign In</Link>
+            <Link to="/SignIn">
+              {auth.currentUser && !hasPhone ? "Add Phone Number" : "Sign In"}
+            </Link>
           </li>
         )}
       </ul>
-      {user && <button onClick={signOut}>Sign Out</button>}
+      {SignedIn && <button onClick={handleSignOut}>Sign Out</button>}
     </nav>
   )
 }

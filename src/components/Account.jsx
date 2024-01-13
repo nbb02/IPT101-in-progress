@@ -1,10 +1,16 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "../styles/Account.module.scss"
 import { Context } from "../Context/Context"
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore"
 
 function Account() {
-  const { myAddresses, handleAddressSubmit, deleteAddress } =
-    useContext(Context)
+  const { userDetails, auth, db } = useContext(Context)
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -24,6 +30,20 @@ function Account() {
     }))
   }
 
+  async function addAddress() {
+    const docRef = doc(db, "userDetails", auth.currentUser.uid)
+    await updateDoc(docRef, {
+      Address: arrayUnion({ ...formData, id: Date.now() }),
+    })
+  }
+
+  async function deleteAddress(id) {
+    const address = userDetails.Address.find((item) => item.id === id)
+    await updateDoc(doc(db, "userDetails", auth.currentUser.uid), {
+      Address: arrayRemove(address),
+    })
+  }
+
   function handleSubmit() {
     const data = Object.values(formData)
     data.pop()
@@ -33,7 +53,7 @@ function Account() {
       alert("Please fill all blanks, only Additional Info can be left blank. ")
 
     if (!hasBlanks) {
-      handleAddressSubmit(formData)
+      addAddress()
       setFormData({
         fullName: "",
         phoneNumber: "",
@@ -52,17 +72,17 @@ function Account() {
       </div>
       <div className={styles.AccountSettingsContainer}>
         <div className={styles.AccountSettings}>
+          <img src={auth.currentUser?.photoURL} alt="" />
           <h2>Account Settings</h2>
-          <p>Name: Citadel's Bistro</p>
-          <p>Email: n******123@gmail.com</p>
-          <p>Username: Citadel</p>
-          <button>ChangePassword</button>
+          <p>Phone Number: {userDetails.phoneNumber}</p>
+          <p>Email: {auth.currentUser?.email}</p>
+          <p>Username: {auth.currentUser?.displayName}</p>
         </div>
         <div className={styles.Addresses}>
           <h2>My Addresses</h2>
           <div className={styles.AddressesContainer}>
-            {myAddresses.length > 0 ? (
-              myAddresses.map((address) => {
+            {userDetails?.Address?.length > 0 ? (
+              userDetails.Address.map((address) => {
                 const {
                   id,
                   fullName,

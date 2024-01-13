@@ -1,58 +1,52 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "../PagesStyles/SignInPage.module.scss"
-import { db } from "../Context/Firebase"
-import { getDocs, collection, query, where, addDoc } from "firebase/firestore"
 import { useNavigate } from "react-router-dom"
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithRedirect,
+} from "firebase/auth"
 import { Context } from "../Context/Context"
+import { doc, getDoc, setDoc } from "firebase/firestore"
 
 function SignInPage() {
-  const [isSignedIn, setSignIn] = useState(true)
-  const [signInData, setSignInData] = useState({ username: "", password: "" })
+  const { auth, db } = useContext(Context)
 
-  const [signUpData, setSignUpData] = useState({ username: "", password: "" })
-  console.log(signUpData)
+  const [step, setStep] = useState(1)
+  const [phoneNumber, setPhoneNumber] = useState("")
 
   const navigate = useNavigate()
 
-  const { handleSignIn, setCookie } = useContext(Context)
-
-  async function signIn() {
-    const { username, password } = signInData
-    let userData
-    const q = query(
-      collection(db, "Users"),
-      where("username", "==", username),
-      where("password", "==", password)
-    )
-    const querySnapshot = await getDocs(q)
-    querySnapshot.forEach((doc) => (userData = doc.data()))
-    if (userData) {
-      handleSignIn(username, userData.isAdmin)
-      navigate("/")
-    } else {
-      alert("Sign in Failed : Check Email or Password")
-    }
+  function signInWithGoogle() {
+    const provider = new GoogleAuthProvider()
+    signInWithRedirect(auth, provider)
   }
 
-  async function signUp() {
-    const { username, password } = signUpData
+  function checkAuthState() {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const docRef = doc(db, "userDetails", auth.currentUser.uid)
+        const docSnap = await getDoc(docRef)
 
-    let usernameData
+        if (docSnap.exists() && docSnap.data().phoneNumber) {
+          navigate("/")
+        } else {
+          console.log("no phonenumber yet")
+          setStep(2)
+        }
+      } else {
+        setStep(1)
+      }
+    })
+  }
 
-    const q = query(collection(db, "Users"), where("username", "==", username))
-    const querySnapshot = await getDocs(q)
-    querySnapshot.forEach((doc) => (usernameData = doc.data()))
-    console.log(usernameData)
+  useEffect(() => {
+    checkAuthState()
+  }, [])
 
-    if (!usernameData) {
-      console.log(usernameData)
-      await addDoc(collection(db, "Users"), { username, password })
-      console.log("sign up success")
-      setCookie("user", { username: username }, { path: "/" })
-      navigate("/")
-    } else {
-      alert("Number already existed")
-    }
+  async function handleSubmit() {
+    await setDoc(doc(db, "userDetails", auth.currentUser.uid), { phoneNumber })
+    checkAuthState()
   }
 
   return (
@@ -67,99 +61,38 @@ function SignInPage() {
           src="https://i.ibb.co/FbYmSWK/295781324-106007968866648-7179000139374969956-n.jpg"
           alt=""
         />
-        <div
-          className={styles.SignUpBox}
-          style={isSignedIn ? { display: "block" } : { display: "none" }}
-        >
-          <h1>Sign Up</h1>
-          <form>
-            <label htmlFor="">Phone Number</label>
-            <input
-              type="tel"
-              value={signUpData.username}
-              onChange={(e) => {
-                setSignUpData((prevState) => ({
-                  ...prevState,
-                  username: e.target.value,
-                }))
-              }}
-            />
-            <label htmlFor="">Set Password</label>
-            <input
-              type="text"
-              value={signUpData.password}
-              onChange={(e) => {
-                setSignUpData((prevState) => ({
-                  ...prevState,
-                  password: e.target.value,
-                }))
-              }}
-            />
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                signUp()
-              }}
-            >
-              Sign Up
+        <div>
+          <div
+            className={styles.step1}
+            style={{ display: step === 1 ? "block" : "none" }}
+          >
+            <h2>Step 1 of 2</h2>
+            <h1>Sign In</h1>
+            <button onClick={signInWithGoogle}>
+              <i className="ri-google-fill"></i> Sign In With Google
             </button>
-          </form>
-          <div>
-            <h5>Already have an account ? </h5>
-            <button onClick={() => setSignIn(!isSignedIn)}>Sign In</button>
           </div>
-        </div>
-
-        <div
-          className={styles.SignInBox}
-          style={!isSignedIn ? { display: "block" } : { display: "none" }}
-        >
-          <h1>Sign In</h1>
-          <form action="">
-            <label htmlFor="">Phone Number</label>
-            <input
-              type="text"
-              onChange={(e) => {
-                setSignInData((prevState) => ({
-                  ...prevState,
-                  username: e.target.value,
-                }))
-              }}
-            />
-            <label htmlFor="">Password</label>
-            <input
-              type="text"
-              onChange={(e) => {
-                setSignInData((prevState) => ({
-                  ...prevState,
-                  password: e.target.value,
-                }))
-              }}
-            />
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                signIn()
-              }}
-            >
-              Sign In
-            </button>
-          </form>
-
-          <a href="">Forgot password?</a>
-          <br />
-          <span className={styles.google}>
-            <i className="ri-google-fill ri-2x"></i>
-          </span>
-          <div>
-            <h5>Dont have an account ? </h5>
-            <button
-              onClick={() => {
-                setSignIn(!isSignedIn)
-              }}
-            >
-              Sign Up
-            </button>
+          <div
+            className={styles.step2}
+            style={{ display: step === 2 ? "block" : "none" }}
+          >
+            <h2>Step 2 of 2</h2>
+            <h1>Add Your Phone Number</h1>
+            <form>
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleSubmit()
+                }}
+              >
+                Submit
+              </button>
+            </form>
           </div>
         </div>
       </div>

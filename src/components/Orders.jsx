@@ -1,13 +1,16 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "../styles/Orders.module.scss"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Context } from "../Context/Context"
 
 function Orders() {
-  const { cart, setCart, changeQuantity, checkOut, myAddresses } =
+  const { cart, setCart, changeQuantity, checkOut, userDetails, auth } =
     useContext(Context)
 
-  const [deliveryInfo, setDeliveryInfo] = useState(myAddresses[0])
+  const [deliveryInfo, setDeliveryInfo] = useState(
+    !!userDetails.Address ? userDetails.Address[0] : []
+  )
+
   const { fullName, phoneNumber, location, street, isHome, otherInfo } =
     deliveryInfo
 
@@ -42,9 +45,14 @@ function Orders() {
     checkOut({ ...newDeliveryDetails, cart })
   }
 
-  function changeDeliveryInfo(info) {
-    setDeliveryInfo(info)
-  }
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!auth.currentUser) {
+      navigate("/")
+    }
+  }, [])
+
   return (
     <div className={styles.Orders}>
       <div className={styles.OrdersBanner}>
@@ -69,8 +77,8 @@ function Orders() {
             style={isOpen ? { display: "flex" } : {}}
           >
             <p>Change Address</p>
-            {myAddresses &&
-              myAddresses.map((address) => {
+            {userDetails?.Address &&
+              userDetails.Address.map((address) => {
                 const {
                   id,
                   fullName,
@@ -84,7 +92,7 @@ function Orders() {
                   <div
                     key={id}
                     onClick={() => {
-                      changeDeliveryInfo(address)
+                      setDeliveryInfo(address)
                       setIsOpen(false)
                     }}
                     style={

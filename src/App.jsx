@@ -11,8 +11,12 @@ import Admin from "./components/Admin"
 import NotFound from "./components/NotFound"
 import About from "./components/About"
 import Inquiries from "./components/Inquiries"
+import { useContext } from "react"
+import { Context } from "./Context/Context"
 
 function App() {
+  const { access } = useContext(Context)
+
   return (
     <div className="App">
       <Routes>
@@ -21,20 +25,27 @@ function App() {
           element={<Page element={<Home />} orderElement={<Orders />} />}
         />
         <Route path="/SignIn" element={<SignInPage />} />
-        <Route path="/Orders" element={<Page element={<Orders />} />} />
-        <Route
-          path="/Transactions"
-          element={<Page element={<Transactions />} />}
-        />
-        <Route
-          path="/Transaction/:transactionId"
-          element={<Page element={<Transaction />} />}
-        />
-        <Route path="/Account" element={<Page element={<Account />} />} />
         <Route path="/About" element={<Page element={<About />} />} />
-        <Route path="/Inquiries" element={<Page element={<Inquiries />} />} />
-        <Route path="/Admin" element={<Page element={<Admin />} />} />
         <Route path="*" element={<NotFound />} />
+        {!access && (
+          <>
+            <Route path="/Orders" element={<Page element={<Orders />} />} />
+            <Route
+              path="/Transactions"
+              element={<Page element={<Transactions />} />}
+            />
+            <Route
+              path="/Transaction/:transactionId"
+              element={<Page element={<Transaction />} />}
+            />
+            <Route path="/Account" element={<Page element={<Account />} />} />
+            <Route
+              path="/Inquiries"
+              element={<Page element={<Inquiries />} />}
+            />
+            <Route path="/Admin" element={<Page element={<Admin />} />} />
+          </>
+        )}
       </Routes>
     </div>
   )

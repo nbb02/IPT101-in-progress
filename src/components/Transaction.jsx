@@ -1,6 +1,6 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { Context } from "../Context/Context"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import styles from "../styles/Transaction.module.scss"
 
 function Transaction() {
@@ -26,6 +26,15 @@ function Transaction() {
       </h1>
     )
   }
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log(auth.currentUser)
+    if (!auth.currentUser) {
+      navigate("/")
+    }
+  }, [])
 
   return (
     <div className={styles.TransactionPage}>

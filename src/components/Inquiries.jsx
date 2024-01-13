@@ -1,12 +1,21 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "../styles/Inquiries.module.scss"
 import { Context } from "../Context/Context"
+import { useNavigate } from "react-router-dom"
 
 function Inquiries() {
-  const { inquiries, setInquiries } = useContext(Context)
+  const { inquiries, setInquiries, auth } = useContext(Context)
 
   const [comment, setComment] = useState({ data: "" })
 
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log(auth.currentUser)
+    if (!auth.currentUser) {
+      navigate("/")
+    }
+  }, [])
   function handleSubmit(e) {
     e.preventDefault()
     if (comment.data.trim() !== "") {

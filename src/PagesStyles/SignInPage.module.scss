@@ -50,15 +50,6 @@
     height: 10em;
   }
 
-  > a {
-    text-decoration: none;
-    color: black;
-
-    &:hover {
-      color: salmon;
-    }
-  }
-
   input {
     padding: 1em;
     height: 2.5em;
@@ -68,97 +59,20 @@
     background-color: #ffffff7e;
   }
 
-  form {
+  > div {
+    height: 15em;
     display: flex;
-    flex-direction: column;
-    gap: 0.5em;
     align-items: center;
-    padding-bottom: 1em;
-    > button {
-      background-color: white;
-      border: 2px solid salmon;
-      color: salmon;
-      width: 60%;
-      height: 2.5em;
-      border-radius: 5em;
-      font-weight: bold;
-      font-size: 1em;
-
-      &:hover {
-        background-color: salmon;
-        color: white;
-      }
-    }
-  }
-
-  h5 {
-    margin: 0;
-    display: inline;
-
-    + button {
-      background: none;
-      border: none;
-      color: black;
-      font-weight: bold;
-
-      &:hover {
-        color: salmon;
-      }
-    }
+    justify-content: center;
   }
 }
 
-// .SignUpCard {
-//   position: absolute;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   color: black;
-//   gap: 1em;
-//   width: 50%;
-//   padding: 2em;
-//   border-radius: 1em;
-//   background-color: rgba(130, 130, 130, 0.2);
-//   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-//   backdrop-filter: blur(5px);
-//   -webkit-backdrop-filter: blur(5px);
-//   border: 1px solid rgba(255, 255, 255, 0.3);
-
-//   h1 {
-//     color: black;
-//   }
-
-//   input,
-//   button {
-//     padding: 1em;
-//     height: 2.5em;
-//     width: 100%;
-//     border-radius: 1em;
-//     border: 2px solid salmon;
-//     background-color: #ffffff7e;
-//   }
-
-//   h5 {
-//     margin: 0;
-//     display: inline;
-
-//     + button {
-//       background: none;
-//       border: none;
-//       color: black;
-//       font-weight: bold;
-
-//       &:hover {
-//         color: salmon;
-//       }
-//     }
-//   }
-// }
-
-.google {
-  &:hover {
-    color: salmon;
-  }
+.step1 {
+  position: absolute;
+}
+.step2 {
+  position: absolute;
+  display: none;
 }
 
 @media screen and (max-width: 767px) {

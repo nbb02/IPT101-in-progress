@@ -1,9 +1,15 @@
 import React, { createContext, useEffect, useState } from "react"
-import { useCookies } from "react-cookie"
+import { auth, db } from "./Firebase"
+import { doc, getDoc, onSnapshot } from "firebase/firestore"
+import { onAuthStateChanged } from "firebase/auth"
 
 const Context = createContext()
 
 function ContextProvider({ children }) {
+  const [access, setAccess] = useState(false)
+
+  const [userDetails, setUserDetails] = useState({})
+
   const [orderMenu, setOrderMenu] = useState([
     {
       id: 1,
@@ -63,21 +69,16 @@ function ContextProvider({ children }) {
     setOrderMenu(orderMenudata)
   }
 
-  //FOR LOGIN
-  const [cookies, setCookie, removeCookie] = useCookies()
-  function handleSignIn(acc, adm) {
-    setCookie("user", { username: acc, isAdmin: adm }, { path: "/" })
-    console.log(acc, adm)
-  }
-  function signOut() {
-    removeCookie("user")
-    window.location.reload()
-  }
-
   //FOR CART
   const [cart, setCart] = useState([])
 
   useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        getUserDetails()
+      }
+    })
+
     const notAvailable = orderMenu
       .filter((item) => item.isAvailable === false)
       .map((item) => item.id)
@@ -85,39 +86,22 @@ function ContextProvider({ children }) {
     setCart((prevState) =>
       prevState.filter((item) => !notAvailable.includes(item.id))
     )
+
+    async function checkAccess() {
+      if (!!auth.currentUser) {
+        const docRef = doc(db, "userDetails", auth.currentUser.uid)
+        const docSnap = await getDoc(docRef)
+        setAccess(docSnap.exists() && docSnap.data().phoneNumber ? true : false)
+      }
+    }
+
+    checkAccess()
   }, [orderMenu])
-
-  const [myAddresses, setMyAddresses] = useState([
-    {
-      id: 1,
-      fullName: "Nathaniel B. Berres",
-      phoneNumber: "091212321",
-      location: "Barangca, Baliwag, Bulacan",
-      street: "Wenceslao Ortega 123",
-      isHome: "Home",
-      otherInfo: "",
-    },
-    {
-      id: 2,
-      fullName: "dasdasdsa",
-      phoneNumber: "09121asdasd2321",
-      location: "Baranasdgca, Baliwag, Bulacan",
-      street: "Wencsaeslao Ortega 1dassad23",
-      isHome: "Hoasdasme",
-      otherInfo: "aasdsa",
-    },
-  ])
-
-  function deleteAddress(id) {
-    setMyAddresses((prevState) =>
-      prevState.filter((address) => address.id !== id)
-    )
-  }
 
   const [transactions, setTransactions] = useState([
     {
       id: 1,
-      deliveryInfo: myAddresses[0],
+      deliveryInfo: userDetails?.uid?.Address[0],
       cart: [
         {
           id: 1,
@@ -143,13 +127,6 @@ function ContextProvider({ children }) {
       totalPrice: "250",
     },
   ])
-
-  function handleAddressSubmit(newAddress) {
-    setMyAddresses((prevState) => [
-      ...prevState,
-      { id: prevState.length + 1, ...newAddress },
-    ])
-  }
 
   function addToCart(food) {
     cart.find((obj) => obj.name === food.name && obj.sauce === food.sauce)
@@ -243,6 +220,30 @@ function ContextProvider({ children }) {
     .map((item) => ({ id: item.id, sauce: item.sauce[0] }))
   const [sauce, setSauce] = useState(preferredSauce)
 
+  //USER DETAILS
+
+  async function getUserDetails() {
+    const docRef = doc(db, "userDetails", auth.currentUser.uid)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      setUserDetails(docSnap.data())
+    }
+  }
+
+  useEffect(() => {
+    const snapShot = () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          onSnapshot(doc(db, "userDetails", auth.currentUser.uid), (doc) => {
+            getUserDetails()
+            console.log(doc.data())
+          })
+        }
+      })
+    }
+    return () => snapShot()
+  }, [])
+
   return (
     <Context.Provider
       value={{
@@ -255,19 +256,16 @@ function ContextProvider({ children }) {
         changeQuantity,
         checkOut,
         transactions,
-        myAddresses,
-        handleAddressSubmit,
-        deleteAddress,
         cancelOrder,
         orderCompleted,
         inquiries,
         setInquiries,
         sauce,
         setSauce,
-        handleSignIn,
-        signOut,
-        cookies,
-        setCookie,
+        auth,
+        db,
+        access,
+        userDetails,
       }}
     >
       {children}
