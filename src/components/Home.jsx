@@ -42,7 +42,7 @@ function Home() {
       })
     } else {
       const updatedCart = cart.map((item) =>
-        item.id === updatedFood.id
+        item.id === updatedFood.id && item.sauce === updatedFood.sauce
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
