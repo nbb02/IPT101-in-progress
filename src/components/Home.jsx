@@ -25,19 +25,16 @@ function Home() {
       const selectedSauce = sauce.find(
         (item) => item.id === updatedFood.id
       ).sauce
-      console.log(selectedSauce)
       updatedFood = { ...food, sauce: selectedSauce }
-      console.log(updatedFood)
       const hasSameSauce = cart.find(
         (item) => item.id === food.id && item.sauce === selectedSauce
       )
       itemExist = itemExist && hasSameSauce
-      console.log(itemExist)
     }
 
     if (cartIsEmpty || !itemExist) {
       const updatedCart = [...cart, { ...updatedFood, quantity: 1 }]
-      await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
+      await setDoc(doc(db, "cartItems", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
     } else {
@@ -46,7 +43,7 @@ function Home() {
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
-      await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
+      await setDoc(doc(db, "cartItems", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
     }
@@ -58,7 +55,6 @@ function Home() {
       .map((item) => ({ id: item.id, sauce: item.sauce[0] }))
 
     setSauce(preferredSauce)
-    console.log(cart)
   }, [orderMenu])
 
   return (

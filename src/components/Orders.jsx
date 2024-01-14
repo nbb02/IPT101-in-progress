@@ -2,11 +2,18 @@ import React, { useContext, useEffect, useState } from "react"
 import styles from "../styles/Orders.module.scss"
 import { Link } from "react-router-dom"
 import { Context } from "../Context/Context"
-import { doc, setDoc } from "firebase/firestore"
+import {
+  arrayUnion,
+  deleteDoc,
+  deleteField,
+  doc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore"
 import { auth, db } from "../Context/Firebase"
 
 function Orders() {
-  const { cart = [], setCart, checkOut, userDetails = {} } = useContext(Context)
+  const { cart = [], userDetails = {} } = useContext(Context)
 
   const [deliveryInfo = {}, setDeliveryInfo] = useState()
 
@@ -15,33 +22,41 @@ function Orders() {
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const [paymentMethods, setPaymentMethods] = useState([
-    "Cash on Delivery",
-    "Gcash",
-    "Paymaya",
-  ])
-  const [selectedMethod, setSelectedMethod] = useState("Cash on Delivery")
-
   const isEmpty = cart.length === 0
-  const subTotal = 0
+  const subTotal = !isEmpty
+    ? cart
+        .map((obj) => obj.quantity * obj.price)
+        .reduce((total, value) => total + value)
+    : 0
   const deliveryFee = !isEmpty ? 50 : 0
   const totalPrice = !isEmpty ? subTotal + deliveryFee : 0
 
-  function check() {
+  async function checkOut() {
     const date = new Date()
-    const newDeliveryDetails = {
+    const transaction = {
+      id: Date.now(),
       deliveryInfo,
       status: "To Process",
       orderDate: date.toLocaleString(),
       subTotal,
       deliveryFee,
       totalPrice,
+      cart,
     }
-    checkOut({ ...newDeliveryDetails, cart })
+
+    console.log(transaction)
+    await setDoc(
+      doc(db, "transactions", auth.currentUser.uid),
+      {
+        transactions: arrayUnion(transaction),
+      },
+      { merge: true }
+    )
+    await deleteDoc(doc(db, "cartItems", auth.currentUser.uid))
   }
 
   useEffect(() => {
-    if (!!userDetails) setDeliveryInfo(userDetails?.Address?.[0])
+    if (userDetails) setDeliveryInfo(userDetails?.Address?.[0])
   }, [userDetails])
 
   async function changeQuantity(food, operation) {
@@ -51,7 +66,7 @@ function Orders() {
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
-      await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
+      await setDoc(doc(db, "cartItems", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
     } else {
@@ -62,7 +77,7 @@ function Orders() {
             : item
         )
         .filter((item) => item.quantity > 0)
-      await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
+      await setDoc(doc(db, "cartItems", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
     }
@@ -155,19 +170,8 @@ function Orders() {
         <p>Sub Total : ₱ {subTotal}</p>
         <p>Delivery Fee : ₱ {deliveryFee}</p>
         <p>Total : ₱ {totalPrice}</p>
-        <label>Payment Method :</label>
-        <select name="" id="">
-          {paymentMethods.map((paymentMethod, index) => (
-            <option key={index}>{paymentMethod}</option>
-          ))}
-        </select>
-        <button
-          disabled={isEmpty}
-          onClick={() => {
-            setCart([])
-            check()
-          }}
-        >
+
+        <button disabled={isEmpty} onClick={checkOut}>
           Checkout
         </button>
       </footer>

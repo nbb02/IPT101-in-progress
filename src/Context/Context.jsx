@@ -35,7 +35,7 @@ function ContextProvider({ children }) {
   const [cart, setCart] = useState([])
 
   async function getCartItems() {
-    const docRef = doc(db, "cartDetails", auth.currentUser.uid)
+    const docRef = doc(db, "cartItems", auth.currentUser.uid)
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
       setCart(docSnap.data().cartItems)
@@ -49,43 +49,6 @@ function ContextProvider({ children }) {
     if (docSnap.exists()) {
       setUserDetails(docSnap.data())
     }
-  }
-
-  const [transactions, setTransactions] = useState([
-    {
-      id: 1,
-      deliveryInfo: userDetails?.uid?.Address[0],
-      cart: [
-        {
-          id: 1,
-          name: "tosilog",
-          time: "Breakfast",
-          img: "https://i.ibb.co/1QmFFLJ/tosilog.jpg",
-          price: 100,
-          quantity: 1,
-        },
-        {
-          id: 2,
-          name: "hotsilog",
-          time: "Breakfast",
-          img: "https://i.ibb.co/R9ZRX8h/hotsilog.jpg",
-          price: 100,
-          quantity: 1,
-        },
-      ],
-      orderDate: "4/10/2023",
-      status: "Processing",
-      subTotal: "200",
-      deliveryFee: "50",
-      totalPrice: "250",
-    },
-  ])
-
-  function checkOut(data) {
-    setTransactions([
-      ...transactions,
-      { id: (transactions.length || 0) + 1, ...data },
-    ])
   }
 
   function cancelOrder(id) {
@@ -184,11 +147,11 @@ function ContextProvider({ children }) {
       })
     }
 
-    const cartDetailsSnapshot = () => {
+    const cartItemsSnapshot = () => {
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          onSnapshot(doc(db, "cartDetails", auth.currentUser.uid), (doc) => {
-            setCart(doc.data().cartItems)
+          onSnapshot(doc(db, "cartItems", auth.currentUser.uid), (doc) => {
+            setCart(doc?.data()?.cartItems)
           })
         }
       })
@@ -197,7 +160,7 @@ function ContextProvider({ children }) {
     return () => {
       userDetailsShot()
       menuSnapshot()
-      cartDetailsSnapshot()
+      cartItemsSnapshot()
     }
   }, [])
 
@@ -208,9 +171,6 @@ function ContextProvider({ children }) {
         setOrderMenu,
         editOrderMenu,
         cart,
-        setCart,
-        checkOut,
-        transactions,
         cancelOrder,
         orderCompleted,
         inquiries,

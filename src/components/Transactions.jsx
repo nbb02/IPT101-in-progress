@@ -1,11 +1,39 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Context } from "../Context/Context"
 import styles from "../styles/Transactions.module.scss"
 import { useNavigate } from "react-router-dom"
+import { doc, getDoc, onSnapshot } from "firebase/firestore"
+import { db } from "../Context/Firebase"
+import { onAuthStateChanged } from "firebase/auth"
 
 function Transactions() {
-  const { transactions, cancelOrder } = useContext(Context)
+  const { cancelOrder, auth } = useContext(Context)
+  const [transactions, setTransactions] = useState([])
+
   const navigate = useNavigate()
+
+  async function getTransactions() {
+    const docRef = doc(db, "transactions", auth.currentUser.uid)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      setTransactions(docSnap.data().transactions)
+    }
+  }
+
+  useEffect(() => {
+    const transactionsSnapshot = () =>
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          onSnapshot(doc(db, "transactions", auth.currentUser.uid), (doc) => {
+            setTransactions(doc?.data()?.transactions)
+          })
+        }
+      })
+    getTransactions()
+    console.log(transactions)
+
+    return transactionsSnapshot()
+  }, [])
 
   return (
     <div className={styles.TransactionsPage}>

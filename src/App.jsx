@@ -11,7 +11,7 @@ import Admin from "./components/Admin"
 import NotFound from "./components/NotFound"
 import About from "./components/About"
 import Inquiries from "./components/Inquiries"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { Context } from "./Context/Context"
 
 function App() {
