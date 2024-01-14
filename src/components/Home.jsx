@@ -5,30 +5,61 @@ import { db } from "../Context/Firebase"
 import { doc, setDoc } from "firebase/firestore"
 
 function Home() {
-  const { orderMenu, sauce, setSauce, auth, cart = [] } = useContext(Context)
+  const { orderMenu, auth, cart = [] } = useContext(Context)
+
+  const [sauce, setSauce] = useState([])
 
   async function addToCart(food) {
     const cartItems = [...cart]
     console.log(cartItems)
+    console.log(food)
 
     const cartIsEmpty = cart.length === 0 ? true : false
-    const item = cartIsEmpty ? [] : cart.find((item) => item.id === food.id)
-    const itemExist = item ? true : false
+    const foodItem = cartIsEmpty ? [] : cart.find((item) => item.id === food.id)
+    let itemExist = foodItem ? true : false
+
+    let updatedFood = food
+
+    const itemHasSauce = food.sauce
+    if (itemHasSauce) {
+      const selectedSauce = sauce.find(
+        (item) => item.id === updatedFood.id
+      ).sauce
+      console.log(selectedSauce)
+      updatedFood = { ...food, sauce: selectedSauce }
+      console.log(updatedFood)
+      const hasSameSauce = cart.find(
+        (item) => item.id === food.id && item.sauce === selectedSauce
+      )
+      itemExist = itemExist && hasSameSauce
+      console.log(itemExist)
+    }
 
     if (cartIsEmpty || !itemExist) {
-      const updatedCart = [...cart, { ...food, quantity: 1 }]
+      const updatedCart = [...cart, { ...updatedFood, quantity: 1 }]
       await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
     } else {
       const updatedCart = cart.map((item) =>
-        item.id === food.id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === updatedFood.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
       )
       await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
     }
   }
+
+  useEffect(() => {
+    const preferredSauce = orderMenu
+      .filter((item) => item.sauce)
+      .map((item) => ({ id: item.id, sauce: item.sauce[0] }))
+
+    setSauce(preferredSauce)
+    console.log(cart)
+  }, [orderMenu])
 
   return (
     <div className={styles.MenuOrder}>

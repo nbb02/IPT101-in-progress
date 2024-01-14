@@ -47,7 +47,9 @@ function Orders() {
   async function changeQuantity(food, operation) {
     if (operation === "increase") {
       const updatedCart = cart.map((item) =>
-        item.id === food.id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === food.id && item.sauce === food.sauce
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
       )
       await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
         cartItems: updatedCart,
@@ -55,7 +57,9 @@ function Orders() {
     } else {
       const updatedCart = cart
         .map((item) =>
-          item.id === food.id ? { ...item, quantity: item.quantity - 1 } : item
+          item.id === food.id && item.sauce === food.sauce
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
         )
         .filter((item) => item.quantity > 0)
       await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {

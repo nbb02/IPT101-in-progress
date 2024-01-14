@@ -39,7 +39,6 @@ function ContextProvider({ children }) {
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
       setCart(docSnap.data().cartItems)
-      console.log(docSnap.data().cartItems)
     }
   }
 
@@ -136,12 +135,6 @@ function ContextProvider({ children }) {
     },
   ])
 
-  //FOR SAUCE
-  const preferredSauce = orderMenu
-    .filter((item) => item.sauce)
-    .map((item) => ({ id: item.id, sauce: item.sauce[0] }))
-  const [sauce, setSauce] = useState(preferredSauce)
-
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -222,8 +215,6 @@ function ContextProvider({ children }) {
         orderCompleted,
         inquiries,
         setInquiries,
-        sauce,
-        setSauce,
         auth,
         db,
         access,
