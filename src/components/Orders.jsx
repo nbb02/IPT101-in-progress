@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from "react"
 import styles from "../styles/Orders.module.scss"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Context } from "../Context/Context"
+import { doc, setDoc } from "firebase/firestore"
+import { auth, db } from "../Context/Firebase"
 
 function Orders() {
-  const { cart, setCart, changeQuantity, checkOut, userDetails, auth } =
-    useContext(Context)
+  const { cart = [], setCart, checkOut, userDetails = {} } = useContext(Context)
 
-  const [deliveryInfo, setDeliveryInfo] = useState(
-    !!userDetails.Address ? userDetails.Address[0] : []
-  )
+  const [deliveryInfo = {}, setDeliveryInfo] = useState()
 
   const { fullName, phoneNumber, location, street, isHome, otherInfo } =
     deliveryInfo
@@ -24,11 +23,7 @@ function Orders() {
   const [selectedMethod, setSelectedMethod] = useState("Cash on Delivery")
 
   const isEmpty = cart.length === 0
-  const subTotal = !isEmpty
-    ? cart
-        .map((obj) => obj.quantity * obj.price)
-        .reduce((total, value) => total + value)
-    : 0
+  const subTotal = 0
   const deliveryFee = !isEmpty ? 50 : 0
   const totalPrice = !isEmpty ? subTotal + deliveryFee : 0
 
@@ -45,13 +40,29 @@ function Orders() {
     checkOut({ ...newDeliveryDetails, cart })
   }
 
-  const navigate = useNavigate()
-
   useEffect(() => {
-    if (!auth.currentUser) {
-      navigate("/")
+    if (!!userDetails) setDeliveryInfo(userDetails?.Address?.[0])
+  }, [userDetails])
+
+  async function changeQuantity(food, operation) {
+    if (operation === "increase") {
+      const updatedCart = cart.map((item) =>
+        item.id === food.id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+      await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
+        cartItems: updatedCart,
+      })
+    } else {
+      const updatedCart = cart
+        .map((item) =>
+          item.id === food.id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0)
+      await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
+        cartItems: updatedCart,
+      })
     }
-  }, [])
+  }
 
   return (
     <div className={styles.Orders}>
@@ -111,12 +122,7 @@ function Orders() {
           </div>
         </div>
       </div>
-      {cart.length === 0 ? (
-        <div className={styles.noOrders}>
-          <h2>No Orders Yet</h2>
-          <Link to="/">Order now</Link>
-        </div>
-      ) : (
+      {cart.length > 0 ? (
         <div className={styles.MyOrders}>
           {cart.map((order, index) => (
             <div key={index} className={styles.menuCards}>
@@ -134,6 +140,11 @@ function Orders() {
               </div>
             </div>
           ))}
+        </div>
+      ) : (
+        <div className={styles.noOrders}>
+          <h2>No Orders Yet</h2>
+          <Link to="/">Order now</Link>
         </div>
       )}
       <footer>

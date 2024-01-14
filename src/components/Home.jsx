@@ -1,14 +1,33 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "../styles/Home.module.scss"
 import { Context } from "../Context/Context"
+import { db } from "../Context/Firebase"
+import { doc, setDoc } from "firebase/firestore"
 
 function Home() {
-  const { orderMenu, addToCart, sauce, setSauce } = useContext(Context)
+  const { orderMenu, sauce, setSauce, auth, cart = [] } = useContext(Context)
 
-  const [orderList, setOrderList] = useState(orderMenu)
+  async function addToCart(food) {
+    const cartItems = [...cart]
+    console.log(cartItems)
 
-  function filter(timeOfDay) {
-    setOrderList(orderMenu.filter((item) => item.time === timeOfDay))
+    const cartIsEmpty = cart.length === 0 ? true : false
+    const item = cartIsEmpty ? [] : cart.find((item) => item.id === food.id)
+    const itemExist = item ? true : false
+
+    if (cartIsEmpty || !itemExist) {
+      const updatedCart = [...cart, { ...food, quantity: 1 }]
+      await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
+        cartItems: updatedCart,
+      })
+    } else {
+      const updatedCart = cart.map((item) =>
+        item.id === food.id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+      await setDoc(doc(db, "cartDetails", auth.currentUser.uid), {
+        cartItems: updatedCart,
+      })
+    }
   }
 
   return (
@@ -17,19 +36,13 @@ function Home() {
         <div className={styles.top}>
           <h2>Citadel's Bistro</h2>
         </div>
-        <div className={styles.filter}>
-          <button onClick={() => setOrderList(orderMenu)}>All</button>
-          <button onClick={() => filter("Breakfast")}>Breakfast</button>
-          <button onClick={() => filter("Lunch")}>Lunch</button>
-          <button onClick={() => filter("Dinner")}>Dinner</button>
-          <button onClick={() => filter("Snacks")}>Snacks</button>
-        </div>
+
         <div className={styles.menu}>
-          {orderList &&
-            orderList
+          {orderMenu &&
+            orderMenu
               .filter((item) => item.isAvailable !== false)
-              .map((food) => (
-                <div key={food.id} className={styles.menuCards}>
+              .map((food, index) => (
+                <div key={index} className={styles.menuCards}>
                   <img src={food.img} alt="" />
                   <p>{food.name.toUpperCase()}</p>
                   <p>{food.time}</p>
@@ -62,17 +75,7 @@ function Home() {
                       ))}
                     </div>
                   )}
-                  <button
-                    onClick={() =>
-                      food.sauce
-                        ? addToCart({
-                            ...food,
-                            sauce: sauce.find((scItem) => scItem.id === food.id)
-                              .sauce,
-                          })
-                        : addToCart(food)
-                    }
-                  >
+                  <button onClick={() => addToCart(food)}>
                     <i className="ri-shopping-cart-2-line"></i>
                   </button>
                 </div>

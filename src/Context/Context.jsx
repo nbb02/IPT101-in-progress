@@ -1,6 +1,12 @@
 import React, { createContext, useEffect, useState } from "react"
 import { auth, db } from "./Firebase"
-import { doc, getDoc, onSnapshot } from "firebase/firestore"
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+} from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 
 const Context = createContext()
@@ -10,93 +16,41 @@ function ContextProvider({ children }) {
 
   const [userDetails, setUserDetails] = useState({})
 
-  const [orderMenu, setOrderMenu] = useState([
-    {
-      id: 1,
-      name: "Tocilog",
-      time: "Breakfast",
-      img: "https://i.ibb.co/1QmFFLJ/tosilog.jpg",
-      price: 60,
-    },
-    {
-      id: 2,
-      name: "Hotsilog",
-      time: "Breakfast",
-      img: "https://i.ibb.co/R9ZRX8h/hotsilog.jpg",
-      price: 50,
-    },
-    {
-      id: 3,
-      name: "Tapsilog",
-      time: "Breakfast",
-      img: "https://i.ibb.co/gJKqhLh/tapsilog.jpg",
-      price: 70,
-    },
-    {
-      id: 4,
-      name: "Goto",
-      time: "Breakfast",
-      img: "https://i.ibb.co/jMd2crK/goto.jpg",
-      price: 70,
-    },
-    {
-      id: 5,
-      name: "Fisball",
-      time: "Snacks",
-      img: "https://i.ibb.co/XZ4Sjqz/fishball.jpg",
-      price: 10,
-      sauce: ["Sweet", "Salty", "Spicy"],
-    },
-    {
-      id: 6,
-      name: "Kikiam",
-      time: "Snacks",
-      img: "https://i.ibb.co/LP7jQq1/kikiam.jpg",
-      price: 10,
-      sauce: ["Sweet", "Salty", "Spicy"],
-    },
-    {
-      id: 7,
-      name: "Fries",
-      time: "Snacks",
-      img: "https://i.ibb.co/bbyjKvD/fries.jpg",
-      price: 10,
-      sauce: ["Ketchup", "Cheese Powder"],
-    },
-  ])
+  const [orderMenu, setOrderMenu] = useState([])
 
   function editOrderMenu(orderMenudata) {
     setOrderMenu(orderMenudata)
   }
 
+  async function getOrderMenu() {
+    const querySnapshot = await getDocs(collection(db, "orderMenu"))
+    const orderMenuData = []
+    querySnapshot.forEach((doc) => {
+      orderMenuData.push(doc.data())
+    })
+    setOrderMenu(orderMenuData)
+  }
+
   //FOR CART
   const [cart, setCart] = useState([])
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        getUserDetails()
-      }
-    })
-
-    const notAvailable = orderMenu
-      .filter((item) => item.isAvailable === false)
-      .map((item) => item.id)
-
-    setCart((prevState) =>
-      prevState.filter((item) => !notAvailable.includes(item.id))
-    )
-
-    async function checkAccess() {
-      if (!!auth.currentUser) {
-        const docRef = doc(db, "userDetails", auth.currentUser.uid)
-        const docSnap = await getDoc(docRef)
-        setAccess(docSnap.exists() && docSnap.data().phoneNumber ? true : false)
-      }
+  async function getCartItems() {
+    const docRef = doc(db, "cartDetails", auth.currentUser.uid)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      setCart(docSnap.data().cartItems)
+      console.log(docSnap.data().cartItems)
     }
+  }
 
-    checkAccess()
-  }, [orderMenu])
+  //USER DETAILS
+  async function getUserDetails() {
+    const docRef = doc(db, "userDetails", auth.currentUser.uid)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      setUserDetails(docSnap.data())
+    }
+  }
 
   const [transactions, setTransactions] = useState([
     {
@@ -127,38 +81,6 @@ function ContextProvider({ children }) {
       totalPrice: "250",
     },
   ])
-
-  function addToCart(food) {
-    cart.find((obj) => obj.name === food.name && obj.sauce === food.sauce)
-      ? setCart((prevState) =>
-          prevState.map((obj) => {
-            return obj.name === food.name && obj.sauce === food.sauce
-              ? { ...obj, quantity: obj.quantity + 1 }
-              : obj
-          })
-        )
-      : setCart((prevState) => [...prevState, { ...food, quantity: 1 }])
-  }
-
-  function changeQuantity(food, operation) {
-    if (operation === "increase") {
-      setCart((prevState) =>
-        prevState.map((obj) =>
-          obj.name === food.name ? { ...obj, quantity: obj.quantity + 1 } : obj
-        )
-      )
-    } else {
-      setCart((prevState) =>
-        prevState
-          .map((obj) =>
-            obj.name === food.name
-              ? { ...obj, quantity: obj.quantity - 1 }
-              : obj
-          )
-          .filter((obj) => obj.quantity > 0)
-      )
-    }
-  }
 
   function checkOut(data) {
     setTransactions([
@@ -220,28 +142,70 @@ function ContextProvider({ children }) {
     .map((item) => ({ id: item.id, sauce: item.sauce[0] }))
   const [sauce, setSauce] = useState(preferredSauce)
 
-  //USER DETAILS
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        getUserDetails()
+        getCartItems()
+        setAccess(true)
+      } else {
+        setUserDetails(() => {})
+        setAccess(() => false)
+      }
+    })
 
-  async function getUserDetails() {
-    const docRef = doc(db, "userDetails", auth.currentUser.uid)
-    const docSnap = await getDoc(docRef)
-    if (docSnap.exists()) {
-      setUserDetails(docSnap.data())
+    const notAvailable = orderMenu
+      .filter((item) => item.isAvailable === false)
+      .map((item) => item.id)
+
+    setCart((prevState) =>
+      prevState.filter((item) => !notAvailable.includes(item.id))
+    )
+
+    async function checkAccess() {
+      if (!!auth.currentUser) {
+        const docRef = doc(db, "userDetails", auth.currentUser.uid)
+        const docSnap = await getDoc(docRef)
+        setAccess(docSnap.exists() && docSnap.data().phoneNumber ? true : false)
+      }
     }
-  }
+
+    checkAccess()
+    getOrderMenu()
+  }, [])
 
   useEffect(() => {
-    const snapShot = () => {
+    const userDetailsShot = () => {
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          onSnapshot(doc(db, "userDetails", auth.currentUser.uid), (doc) => {
+          onSnapshot(doc(db, "userDetails", auth.currentUser.uid), () => {
             getUserDetails()
-            console.log(doc.data())
           })
         }
       })
     }
-    return () => snapShot()
+
+    const menuSnapshot = () => {
+      onSnapshot(collection(db, "orderMenu"), () => {
+        getOrderMenu()
+      })
+    }
+
+    const cartDetailsSnapshot = () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          onSnapshot(doc(db, "cartDetails", auth.currentUser.uid), (doc) => {
+            setCart(doc.data().cartItems)
+          })
+        }
+      })
+    }
+
+    return () => {
+      userDetailsShot()
+      menuSnapshot()
+      cartDetailsSnapshot()
+    }
   }, [])
 
   return (
@@ -252,8 +216,6 @@ function ContextProvider({ children }) {
         editOrderMenu,
         cart,
         setCart,
-        addToCart,
-        changeQuantity,
         checkOut,
         transactions,
         cancelOrder,
@@ -266,6 +228,7 @@ function ContextProvider({ children }) {
         db,
         access,
         userDetails,
+        getOrderMenu,
       }}
     >
       {children}

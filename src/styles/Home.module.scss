@@ -80,27 +80,6 @@
   }
 }
 
-.filter {
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  padding: 1em;
-  gap: 0.5em;
-  grid-template-columns: repeat(5, 1fr);
-
-  > button {
-    padding: 0.25em;
-    border-radius: 0.5em;
-    border: 2px solid salmon;
-    background: none;
-    color: saddlebrown;
-
-    &:hover {
-      background-color: #ffcd42;
-    }
-  }
-}
-
 .menu {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));

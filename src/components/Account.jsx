@@ -1,16 +1,10 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import styles from "../styles/Account.module.scss"
 import { Context } from "../Context/Context"
-import {
-  arrayRemove,
-  arrayUnion,
-  deleteDoc,
-  doc,
-  updateDoc,
-} from "firebase/firestore"
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore"
 
 function Account() {
-  const { userDetails, auth, db } = useContext(Context)
+  const { userDetails = {}, auth, db } = useContext(Context)
 
   const [formData, setFormData] = useState({
     fullName: "",

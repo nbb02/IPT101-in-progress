@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import React, { useContext, useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import styles from "../styles/SideMenu.module.scss"
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import { doc, getDoc } from "firebase/firestore"
 import { db } from "../Context/Firebase"
+import { Context } from "../Context/Context"
 
 function Menu() {
+  const navigate = useNavigate()
   const auth = getAuth()
+  const { access } = useContext(Context)
   const [SignedIn, setSignedIn] = useState(false)
   const [hasPhone, setHasPhone] = useState(false)
 
-  function handleSignOut() {
-    signOut(auth)
+  async function handleSignOut() {
+    await signOut(auth)
+    navigate("/")
   }
 
   function checkAuthState() {
@@ -42,7 +46,7 @@ function Menu() {
         <li>
           <Link to="/">Home</Link>
         </li>
-        {hasPhone && (
+        {hasPhone && access && (
           <>
             <li>
               <Link to="/Orders">My Orders</Link>
@@ -66,7 +70,7 @@ function Menu() {
             <Link to="/Admin">ADMIN</Link>
           </li>
         )} */}
-        {!hasPhone && (
+        {(!hasPhone || !access) && (
           <li>
             <Link to="/SignIn">
               {auth.currentUser && !hasPhone ? "Add Phone Number" : "Sign In"}

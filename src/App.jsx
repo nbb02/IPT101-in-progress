@@ -11,7 +11,7 @@ import Admin from "./components/Admin"
 import NotFound from "./components/NotFound"
 import About from "./components/About"
 import Inquiries from "./components/Inquiries"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { Context } from "./Context/Context"
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
         <Route path="/SignIn" element={<SignInPage />} />
         <Route path="/About" element={<Page element={<About />} />} />
         <Route path="*" element={<NotFound />} />
-        {!access && (
+        {access && (
           <>
             <Route path="/Orders" element={<Page element={<Orders />} />} />
             <Route
