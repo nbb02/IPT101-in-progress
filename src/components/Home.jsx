@@ -5,7 +5,7 @@ import { db } from "../Context/Firebase"
 import { doc, setDoc } from "firebase/firestore"
 
 function Home() {
-  const { orderMenu, auth, cart = [] } = useContext(Context)
+  const { orderMenu = [], auth, cart = [] } = useContext(Context)
 
   const [sauce, setSauce] = useState([])
 
@@ -50,11 +50,13 @@ function Home() {
   }
 
   useEffect(() => {
-    const preferredSauce = orderMenu
-      .filter((item) => item.sauce)
-      .map((item) => ({ id: item.id, sauce: item.sauce[0] }))
+    if (orderMenu.length !== 0) {
+      const preferredSauce = orderMenu
+        .filter((item) => item.sauce)
+        .map((item) => ({ id: item.id, sauce: item.sauce[0] }))
 
-    setSauce(preferredSauce)
+      setSauce(preferredSauce)
+    }
   }, [orderMenu])
 
   return (
@@ -65,7 +67,7 @@ function Home() {
         </div>
 
         <div className={styles.menu}>
-          {orderMenu &&
+          {orderMenu.length !== 0 &&
             orderMenu
               .filter((item) => item.isAvailable !== false)
               .map((food, index) => (

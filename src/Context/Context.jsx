@@ -1,12 +1,6 @@
 import React, { createContext, useEffect, useState } from "react"
 import { auth, db } from "./Firebase"
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-} from "firebase/firestore"
+import { doc, getDoc, onSnapshot } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 
 const Context = createContext()
@@ -18,17 +12,11 @@ function ContextProvider({ children }) {
 
   const [orderMenu, setOrderMenu] = useState([])
 
-  function editOrderMenu(orderMenudata) {
-    setOrderMenu(orderMenudata)
-  }
-
   async function getOrderMenu() {
-    const querySnapshot = await getDocs(collection(db, "orderMenu"))
-    const orderMenuData = []
-    querySnapshot.forEach((doc) => {
-      orderMenuData.push(doc.data())
-    })
-    setOrderMenu(orderMenuData)
+    const docSnap = await getDoc(doc(db, "orderMenu", "orderMenuItems"))
+    if (docSnap.exists()) {
+      setOrderMenu(docSnap?.data()?.orderMenuItems)
+    }
   }
 
   //FOR CART
@@ -87,16 +75,16 @@ function ContextProvider({ children }) {
     const userDetailsShot = () => {
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          onSnapshot(doc(db, "userDetails", auth.currentUser.uid), () => {
-            getUserDetails()
+          onSnapshot(doc(db, "userDetails", auth.currentUser.uid), (doc) => {
+            setUserDetails(doc?.data())
           })
         }
       })
     }
 
     const menuSnapshot = () => {
-      onSnapshot(collection(db, "orderMenu"), () => {
-        getOrderMenu()
+      onSnapshot(doc(db, "orderMenu", "orderMenuItems"), (doc) => {
+        setOrderMenu(doc?.data()?.orderMenuItems)
       })
     }
 
