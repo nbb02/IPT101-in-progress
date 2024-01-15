@@ -126,6 +126,7 @@ function ContextProvider({ children }) {
         db,
         access,
         userDetails,
+        getUserDetails,
       }}
     >
       {children}

@@ -10,10 +10,6 @@ function Home() {
   const [sauce, setSauce] = useState([])
 
   async function addToCart(food) {
-    const cartItems = [...cart]
-    console.log(cartItems)
-    console.log(food)
-
     const cartIsEmpty = cart.length === 0 ? true : false
     const foodItem = cartIsEmpty ? [] : cart.find((item) => item.id === food.id)
     let itemExist = foodItem ? true : false
@@ -37,6 +33,8 @@ function Home() {
       await setDoc(doc(db, "cartItems", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
+        .then(() => console.log(updatedCart))
+        .catch((err) => console.log(err))
     } else {
       const updatedCart = cart.map((item) =>
         item.id === updatedFood.id && item.sauce === updatedFood.sauce
@@ -46,6 +44,8 @@ function Home() {
       await setDoc(doc(db, "cartItems", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
+        .then(() => console.log(updatedCart + "dsa"))
+        .catch((err) => console.log(err))
     }
   }
 
