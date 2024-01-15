@@ -1,40 +1,40 @@
-import React, { useContext, useEffect } from "react"
-import { Context } from "../Context/Context"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import styles from "../styles/Transaction.module.scss"
+import { doc, getDoc } from "firebase/firestore"
+import { auth, db } from "../Context/Firebase"
 
 function Transaction() {
-  const { transactions } = useContext(Context)
   const { transactionId } = useParams()
-  const data = transactions.find((obj) => obj.id === parseInt(transactionId))
+
+  const [transaction = {}, setTransaction] = useState()
+
+  async function getTransactions() {
+    const docRef = doc(db, "transactions", auth.currentUser.uid)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      setTransaction(
+        docSnap?.data()?.transactions?.find((item) => item.id == transactionId)
+      )
+    }
+  }
+
+  useEffect(() => {
+    getTransactions()
+    console.log(transaction)
+  }, [])
+
   const {
     cart,
-    deliveryInfo,
+    deliveryInfo = {},
     status,
     totalPrice,
     orderDate,
     subTotal,
     deliveryFee,
-  } = data || {}
+  } = transaction
   const { fullName, phoneNumber, location, street, isHome, otherInfo } =
-    deliveryInfo || {}
-
-  if (!data) {
-    return (
-      <h1>
-        Not Found <Link to="/">Home</Link>
-      </h1>
-    )
-  }
-
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    console.log(auth.currentUser)
-    if (!auth.currentUser) {
-      navigate("/")
-    }
-  }, [])
+    deliveryInfo
 
   return (
     <div className={styles.TransactionPage}>

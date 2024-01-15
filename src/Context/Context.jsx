@@ -51,53 +51,6 @@ function ContextProvider({ children }) {
     }
   }
 
-  function cancelOrder(id) {
-    setTransactions((prevState) =>
-      prevState.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              status: "Cancelled",
-            }
-          : item
-      )
-    )
-  }
-
-  function orderCompleted(id) {
-    setTransactions((prevState) =>
-      prevState.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              status: "Completed",
-            }
-          : item
-      )
-    )
-  }
-
-  //FOR INQUIRIES
-  const [inquiries, setInquiries] = useState([
-    {
-      id: 1,
-      userName: "Nberres",
-      comment: "Where are you located?",
-      replies: [
-        { id: 1, userName: "Citadel's Bistro", reply: "At San Ildefonso" },
-      ],
-    },
-    {
-      id: 2,
-      userName: "Nberres",
-      comment: "What is the best seller",
-      replies: [
-        { id: 1, userName: "Citadel's Bistro", reply: "Tocilog" },
-        { id: 2, userName: "Citadel's Bistro", reply: "Goto" },
-      ],
-    },
-  ])
-
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -168,18 +121,11 @@ function ContextProvider({ children }) {
     <Context.Provider
       value={{
         orderMenu,
-        setOrderMenu,
-        editOrderMenu,
         cart,
-        cancelOrder,
-        orderCompleted,
-        inquiries,
-        setInquiries,
         auth,
         db,
         access,
         userDetails,
-        getOrderMenu,
       }}
     >
       {children}

@@ -1,67 +1,59 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import styles from "../styles/Inquiries.module.scss"
-import { Context } from "../Context/Context"
-import { useNavigate } from "react-router-dom"
+import { auth, db } from "../Context/Firebase"
+import { arrayUnion, doc, getDoc, onSnapshot, setDoc } from "firebase/firestore"
+import { onAuthStateChanged } from "firebase/auth"
 
 function Inquiries() {
-  const { inquiries, setInquiries, auth } = useContext(Context)
+  const [comment, setComment] = useState("")
 
-  const [comment, setComment] = useState({ data: "" })
+  const [inquiries, setInquiries] = useState([])
 
-  const navigate = useNavigate()
+  async function getInquiries() {
+    const docRef = doc(db, "inquiryData", auth.currentUser.uid)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      setInquiries(docSnap?.data()?.inquiries)
+    }
+  }
+
+  async function sendInquiry() {
+    if (comment !== "") {
+      const date = new Date()
+      const inquiryData = {
+        id: Date.now(),
+        date: date.toLocaleString(),
+        comment,
+        userName: auth.currentUser.displayName.split(" ")[0],
+      }
+      console.log(inquiryData)
+
+      await setDoc(
+        doc(db, "inquiryData", auth.currentUser.uid),
+        {
+          inquiries: arrayUnion(inquiryData),
+        },
+        { merge: true }
+      )
+      setComment("")
+    } else {
+      console.log("empty")
+    }
+  }
 
   useEffect(() => {
-    console.log(auth.currentUser)
-    if (!auth.currentUser) {
-      navigate("/")
-    }
-  }, [])
-  function handleSubmit(e) {
-    e.preventDefault()
-    if (comment.data.trim() !== "") {
-      setInquiries((prevState) => [
-        {
-          id: prevState.length + 1,
-          userName: "Citadel's Bistro",
-          comment: comment.data,
-        },
-        ...prevState,
-      ])
-    }
-    setComment({ data: "" })
-  }
-
-  function handleReply(e, id) {
-    let value = e.target.previousElementSibling.value
-    if (value.trim() !== "") {
-      setInquiries((prevState) => {
-        return prevState.map((item) =>
-          item.id === id
-            ? {
-                ...item,
-                replies: item.replies
-                  ? [
-                      ...item.replies,
-                      {
-                        id: item.replies.length + 1,
-                        userName: "Citadel's Bistro",
-                        reply: value,
-                      },
-                    ]
-                  : [
-                      {
-                        id: 1,
-                        userName: "Citadel's Bistro",
-                        reply: value,
-                      },
-                    ],
-              }
-            : item
-        )
+    const inquirySnapshot = () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          onSnapshot(doc(db, "inquiryData", auth.currentUser.uid), (doc) => {
+            setInquiries(doc?.data()?.inquiries)
+          })
+        }
       })
     }
-    e.target.previousElementSibling.value = ""
-  }
+
+    return inquirySnapshot()
+  }, [])
 
   return (
     <div>
@@ -76,31 +68,26 @@ function Inquiries() {
                 <div className={styles.comment}>
                   <p>{item.userName}</p>
                   <p>{item.comment}</p>
-
-                  <input type="text" />
-                  <button onClick={(e) => handleReply(e, item.id)}>
-                    Reply
-                  </button>
                 </div>
-
-                {item.replies &&
-                  item.replies.length > 0 &&
-                  item.replies.map((reply) => (
-                    <div className={styles.reply} key={reply.id}>
-                      <p>{reply.userName}</p>
-                      <p>{reply.reply}</p>
-                    </div>
-                  ))}
               </div>
             )
           })}
-        <form onSubmit={handleSubmit}>
+        <form>
           <input
             type="text"
-            value={comment.data}
-            onChange={(e) => setComment({ data: e.target.value })}
+            value={comment}
+            onChange={(e) => {
+              setComment(e.target.value)
+            }}
           />
-          <button type="submit">Comment</button>
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              sendInquiry()
+            }}
+          >
+            Comment
+          </button>
         </form>
       </div>
     </div>
