@@ -17,6 +17,7 @@ import { auth, db } from "./Context/Firebase"
 import { doc, getDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 import AdminInquiries from "./adminComponents/AdminInquiries"
+import AdminTransactions from "./adminComponents/AdminTransactions"
 
 function App() {
   const { access } = useContext(Context)
@@ -75,6 +76,10 @@ function App() {
                 <Route
                   path="/AdminInquiries"
                   element={<Page element={<AdminInquiries />} />}
+                />
+                <Route
+                  path="/AdminTransactions"
+                  element={<Page element={<AdminTransactions />} />}
                 />
               </>
             )}

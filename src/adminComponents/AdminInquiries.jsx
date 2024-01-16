@@ -5,7 +5,6 @@ import {
   collection,
   doc,
   onSnapshot,
-  setDoc,
   updateDoc,
 } from "firebase/firestore"
 import styles from "../PagesStyles/AdminInquiries.module.scss"
@@ -43,7 +42,6 @@ function AdminInquiries() {
           inquiries.push(doc.data())
         })
         setInquiryData(inquiries)
-        console.log(inquiries)
       })
     }
 

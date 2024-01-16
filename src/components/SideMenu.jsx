@@ -75,6 +75,9 @@ function Menu() {
               <li>
                 <Link to="/AdminInquiries">Inquries</Link>
               </li>
+              <li>
+                <Link to="/AdminTransactions">Admin Transactions</Link>
+              </li>
             </>
           ))}
         {(!hasPhone || !access) && (
