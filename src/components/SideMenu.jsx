@@ -9,7 +9,7 @@ import { Context } from "../Context/Context"
 function Menu() {
   const navigate = useNavigate()
   const auth = getAuth()
-  const { access } = useContext(Context)
+  const { access, userDetails } = useContext(Context)
   const [SignedIn, setSignedIn] = useState(false)
   const [hasPhone, setHasPhone] = useState(false)
 
@@ -65,11 +65,13 @@ function Menu() {
         <li>
           <Link to="/About">About us</Link>
         </li>
-        {/* { && (
-          <li>
-            <Link to="/Admin">ADMIN</Link>
-          </li>
-        )} */}
+        {/* fix this after */}
+        {userDetails?.Admin ||
+          (true && (
+            <li>
+              <Link to="/Admin">ADMIN</Link>
+            </li>
+          ))}
         {(!hasPhone || !access) && (
           <li>
             <Link to="/SignIn">

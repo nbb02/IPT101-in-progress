@@ -6,10 +6,7 @@ import { useNavigate } from "react-router-dom"
 
 function Admin() {
   const navigate = useNavigate()
-  const { transactions, orderCompleted, cancelOrder, cookies } =
-    useContext(Context)
-
-  if (!cookies.user.isAdmin) navigate("/")
+  const { transactions, orderCompleted, cancelOrder } = useContext(Context)
 
   return (
     <div className={styles.Admin}>

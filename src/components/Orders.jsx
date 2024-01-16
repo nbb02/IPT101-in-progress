@@ -2,14 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import styles from "../styles/Orders.module.scss"
 import { Link } from "react-router-dom"
 import { Context } from "../Context/Context"
-import {
-  arrayUnion,
-  deleteDoc,
-  deleteField,
-  doc,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore"
+import { arrayUnion, deleteDoc, doc, setDoc } from "firebase/firestore"
 import { auth, db } from "../Context/Firebase"
 
 function Orders() {
@@ -44,7 +37,6 @@ function Orders() {
       cart,
     }
 
-    console.log(transaction)
     await setDoc(
       doc(db, "transactions", auth.currentUser.uid),
       {

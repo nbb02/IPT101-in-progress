@@ -4,7 +4,7 @@ import { Context } from "../Context/Context"
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore"
 
 function Account() {
-  const { userDetails = {}, auth, db, getUserDetails } = useContext(Context)
+  const { userDetails = {}, auth, db } = useContext(Context)
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -29,7 +29,6 @@ function Account() {
     await updateDoc(docRef, {
       Address: arrayUnion({ ...formData, id: Date.now() }),
     })
-    getUserDetails()
   }
 
   async function deleteAddress(id) {
@@ -67,7 +66,7 @@ function Account() {
       </div>
       <div className={styles.AccountSettingsContainer}>
         <div className={styles.AccountSettings}>
-          <img src={auth.currentUser?.photoURL} alt="" />
+          <img src={auth?.currentUser?.photoURL} alt="" />
           <h2>Account Settings</h2>
           <p>Phone Number: {userDetails.phoneNumber}</p>
           <p>Email: {auth.currentUser?.email}</p>

@@ -1,29 +1,25 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
-import { Context } from "../Context/Context"
+import React, { useEffect, useState } from "react"
 import styles from "../styles/MenuEditor.module.scss"
-import axios from "axios"
+import { db, auth } from "../Context/Firebase"
+import { arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore"
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage"
 
 function MenuEditor() {
-  const { orderMenu, editOrderMenu, setOrderMenu } = useContext(Context)
-
-  const imgRef = useRef()
+  const [orderMenu, setOrderMenu] = useState([])
 
   const [img, setImg] = useState({
     picturePreview: "",
     pictureFile: "",
   })
-
-  const [addToMenu, setAddToMenu] = useState({
+  const [foodToAddDetails, setFoodToAddDetails] = useState({
     name: "",
-    time: "",
-    img: "",
     price: "",
-  })
-
-  const [toEdit, setToEdit] = useState({
-    name: "",
-    time: "",
-    price: "",
+    photoUrl: "",
   })
 
   function setImage(e) {
@@ -34,80 +30,95 @@ function MenuEditor() {
     })
   }
 
-  function addItemToMenu() {
-    const formData = new FormData()
-    formData.append("image", img.pictureFile)
-    axios
-      .post(
-        "https://api.imgbb.com/1/upload?&key=85587e7e4fa1b9ca6453dd5abbf8ac34",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((res) => {
-        setOrderMenu((prevState) => [
-          {
-            id: prevState.length + 1,
-            ...addToMenu,
-            img: res.data.data.display_url,
-          },
-          ...prevState,
-        ])
+  async function addItemToMenu() {
+    const storage = getStorage()
+    const storageRef = ref(storage, `foodImages/${foodToAddDetails.name}.jpg`)
 
-        setImg({
-          picturePreview: "",
-          pictureFile: "",
+    const uploadTask = uploadBytesResumable(storageRef, img.pictureFile)
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        console.log("in progress")
+      },
+      (error) => {
+        console.log(error)
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+          setFoodToAddDetails((prevState) => ({
+            ...prevState,
+            photoUrl: downloadUrl,
+          }))
         })
-        setAddToMenu({
-          name: "",
-          time: "",
-          img: "",
-          price: "",
-        })
-        imgRef.current.value = ""
-      })
+      }
+    )
+
+    const date = new Date()
+    const itemToAdd = {
+      id: Date.now(),
+      ...foodToAddDetails,
+      dateAdded: date.toLocaleString(),
+      addedBy: auth?.currentUser?.displayName,
+    }
+
+    await updateDoc(doc(db, "orderMenu", "orderMenuItems"), {
+      orderMenuItems: arrayUnion(itemToAdd),
+    })
   }
-
   function addItemOnChange(e) {
     const { name, value } = e.target
-
-    setAddToMenu((prevState) => ({ ...prevState, [name]: value }))
+    setFoodToAddDetails((prevState) => ({ ...prevState, [name]: value }))
+    console.log(foodToAddDetails)
   }
 
-  function handleChange(e) {
+  const [toEdit, setToEdit] = useState({ name: "", price: "" })
+
+  function handleEditChange(e) {
     const { name, value } = e.target
     setToEdit((prevState) => ({ ...prevState, [name]: value }))
   }
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    const data = orderMenu.filter((item) => item.id !== toEdit.id)
-    editOrderMenu([toEdit, ...data])
-    setToEdit({
-      name: "",
-      time: "",
-      price: "",
+  async function handleEditSubmit() {
+    const updatedMenu = orderMenu.map((item) =>
+      item.id === toEdit.id
+        ? { ...item, name: toEdit.name, price: toEdit.price }
+        : item
+    )
+    await updateDoc(doc(db, "orderMenu", "orderMenuItems"), {
+      orderMenuItems: updatedMenu,
+    })
+    setToEdit({ name: "", price: "" })
+  }
+
+  async function setIsAvailable(id) {
+    const updatedMenu = orderMenu.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            isAvailable: "isAvailable" in item ? !item.isAvailable : false,
+          }
+        : item
+    )
+    await updateDoc(doc(db, "orderMenu", "orderMenuItems"), {
+      orderMenuItems: updatedMenu,
     })
   }
 
-  function setIsAvailable(id) {
-    setOrderMenu((prevState) =>
-      prevState.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              isAvailable: "isAvailable" in item ? !item.isAvailable : false,
-            }
-          : item
-      )
-    )
-  }
   useEffect(() => {
-    console.log(orderMenu)
-  }, [orderMenu])
+    const orderMenuSnapshot = () => {
+      onSnapshot(doc(db, "orderMenu", "orderMenuItems"), (doc) => {
+        setOrderMenu(doc?.data()?.orderMenuItems)
+        console.log("request ordermenu")
+      })
+    }
+    return () => {
+      orderMenuSnapshot()
+    }
+  }, [])
+  useEffect(() => {
+    console.log(toEdit)
+  }, [toEdit])
 
   return (
     <div className={styles.MenuEditor}>
@@ -123,27 +134,19 @@ function MenuEditor() {
             name="img"
             placeholder="Image"
             onChange={setImage}
-            ref={imgRef}
           />
           <input
             type="text"
             name="name"
             placeholder="Name"
-            value={addToMenu.name}
-            onChange={addItemOnChange}
-          />
-          <input
-            type="text"
-            name="time"
-            placeholder="TimeEaten"
-            value={addToMenu.time}
+            value={foodToAddDetails.name}
             onChange={addItemOnChange}
           />
           <input
             type="text"
             name="price"
             placeholder="Price"
-            value={addToMenu.price}
+            value={foodToAddDetails.price}
             onChange={addItemOnChange}
           />
           <button onClick={addItemToMenu}>Add to Menu</button>
@@ -151,28 +154,30 @@ function MenuEditor() {
       </div>
       {toEdit.id && (
         <>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div className={styles.editCard}>
               <img src={toEdit.img} alt="" />
               <input
                 type="text"
                 name="name"
-                onChange={handleChange}
+                onChange={handleEditChange}
                 value={toEdit.name}
               />
-              <input
-                type="text"
-                name="time"
-                onChange={handleChange}
-                value={toEdit.time}
-              />
+              <p></p>
               <input
                 type="text"
                 name="price"
-                onChange={handleChange}
+                onChange={handleEditChange}
                 value={toEdit.price}
               />
-              <button type="submit">Done Editing</button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleEditSubmit()
+                }}
+              >
+                Done Editing
+              </button>
             </div>
           </form>
         </>
@@ -180,9 +185,9 @@ function MenuEditor() {
 
       <div className={styles.menu}>
         {orderMenu &&
-          orderMenu.map((food) => (
+          orderMenu.map((food, index) => (
             <div
-              key={food.id}
+              key={index}
               className={`${styles.menuCards} ${
                 "isAvailable" in food && food.isAvailable === false
                   ? styles.isUnavailable
@@ -191,7 +196,7 @@ function MenuEditor() {
             >
               <img src={food.img} alt="" />
               <p>{food.name.toString().toUpperCase()}</p>
-              <p>{food.time}</p>
+              <p></p>
               <p>₱ {food.price}</p>
               <div className={styles.button}>
                 <button onClick={() => setToEdit(food)}>Edit Item</button>

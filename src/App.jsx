@@ -43,7 +43,9 @@ function App() {
               path="/Inquiries"
               element={<Page element={<Inquiries />} />}
             />
-            <Route path="/Admin" element={<Page element={<Admin />} />} />
+            {access && (
+              <Route path="/Admin" element={<Page element={<Admin />} />} />
+            )}
           </>
         )}
       </Routes>

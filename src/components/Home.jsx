@@ -33,8 +33,6 @@ function Home() {
       await setDoc(doc(db, "cartItems", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
-        .then(() => console.log(updatedCart))
-        .catch((err) => console.log(err))
     } else {
       const updatedCart = cart.map((item) =>
         item.id === updatedFood.id && item.sauce === updatedFood.sauce
@@ -44,8 +42,6 @@ function Home() {
       await setDoc(doc(db, "cartItems", auth.currentUser.uid), {
         cartItems: updatedCart,
       })
-        .then(() => console.log(updatedCart + "dsa"))
-        .catch((err) => console.log(err))
     }
   }
 
@@ -74,7 +70,6 @@ function Home() {
                 <div key={index} className={styles.menuCards}>
                   <img src={food.img} alt="" />
                   <p>{food.name.toUpperCase()}</p>
-                  <p>{food.time}</p>
                   <p>₱ {food.price}</p>
 
                   {food.sauce && (
