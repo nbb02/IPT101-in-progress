@@ -11,11 +11,37 @@ import Admin from "./components/Admin"
 import NotFound from "./components/NotFound"
 import About from "./components/About"
 import Inquiries from "./components/Inquiries"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Context } from "./Context/Context"
+import { auth, db } from "./Context/Firebase"
+import { doc, getDoc } from "firebase/firestore"
+import { onAuthStateChanged } from "firebase/auth"
+import AdminInquiries from "./adminComponents/AdminInquiries"
 
 function App() {
   const { access } = useContext(Context)
+
+  const [admin, setAdmin] = useState(false)
+
+  useEffect(() => {
+    const checkAdminRights = () => {
+      onAuthStateChanged(auth, (user) => {
+        async function getUserDetails() {
+          const docSnap = await getDoc(
+            doc(db, "userDetails", auth.currentUser.uid)
+          )
+          if (docSnap.exists()) {
+            setAdmin(docSnap?.data()?.Admin)
+          }
+        }
+
+        if (user) {
+          getUserDetails()
+        }
+      })
+    }
+    return checkAdminRights()
+  }, [])
 
   return (
     <div className="App">
@@ -43,8 +69,14 @@ function App() {
               path="/Inquiries"
               element={<Page element={<Inquiries />} />}
             />
-            {access && (
-              <Route path="/Admin" element={<Page element={<Admin />} />} />
+            {admin && (
+              <>
+                <Route path="/Admin" element={<Page element={<Admin />} />} />
+                <Route
+                  path="/AdminInquiries"
+                  element={<Page element={<AdminInquiries />} />}
+                />
+              </>
             )}
           </>
         )}

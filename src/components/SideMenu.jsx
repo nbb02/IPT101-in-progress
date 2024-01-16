@@ -68,9 +68,14 @@ function Menu() {
         {/* fix this after */}
         {userDetails?.Admin ||
           (true && (
-            <li>
-              <Link to="/Admin">ADMIN</Link>
-            </li>
+            <>
+              <li>
+                <Link to="/Admin">ADMIN</Link>
+              </li>
+              <li>
+                <Link to="/AdminInquiries">Inquries</Link>
+              </li>
+            </>
           ))}
         {(!hasPhone || !access) && (
           <li>

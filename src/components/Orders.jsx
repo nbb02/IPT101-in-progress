@@ -83,10 +83,18 @@ function Orders() {
       <div className={styles.details}>
         <p>Delivery Details</p>
         <div>
-          <p>{fullName + " | " + phoneNumber}</p>
-          <p>
-            {Object.values({ location, street, isHome, otherInfo }).join(" ")}
-          </p>
+          {userDetails?.Address ? (
+            <>
+              <p>{fullName + " | " + phoneNumber}</p>
+              <p>
+                {Object.values({ location, street, isHome, otherInfo }).join(
+                  " "
+                )}
+              </p>
+            </>
+          ) : (
+            <p>No Available Address</p>
+          )}
           <label
             className={styles.changeButton}
             onClick={() => setIsOpen(!isOpen)}

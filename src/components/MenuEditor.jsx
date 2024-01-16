@@ -38,7 +38,7 @@ function MenuEditor() {
 
     uploadTask.on(
       "state_changed",
-      (snapshot) => {
+      () => {
         console.log("in progress")
       },
       (error) => {
@@ -105,20 +105,17 @@ function MenuEditor() {
     })
   }
 
-  useEffect(() => {
-    const orderMenuSnapshot = () => {
-      onSnapshot(doc(db, "orderMenu", "orderMenuItems"), (doc) => {
-        setOrderMenu(doc?.data()?.orderMenuItems)
-        console.log("request ordermenu")
-      })
-    }
-    return () => {
-      orderMenuSnapshot()
-    }
-  }, [])
-  useEffect(() => {
-    console.log(toEdit)
-  }, [toEdit])
+  // useEffect(() => {
+  //   const orderMenuSnapshot = () => {
+  //     onSnapshot(doc(db, "orderMenu", "orderMenuItems"), (doc) => {
+  //       setOrderMenu(doc?.data()?.orderMenuItems)
+  //       console.log("request ordermenu")
+  //     })
+  //   }
+  //   return () => {
+  //     orderMenuSnapshot()
+  //   }
+  // }, [])
 
   return (
     <div className={styles.MenuEditor}>

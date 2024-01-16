@@ -114,6 +114,47 @@
   }
 }
 
+.chatbox {
+  border-radius: 1em;
+  padding: 1em;
+  border: 1px solid gainsboro;
+  display: flex;
+  flex-direction: column;
+
+  .chatsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    > div {
+      border-radius: 0.25em;
+      width: max-content;
+      padding: 0.25em;
+
+      > p {
+        margin: 0;
+      }
+      > img {
+        width: 10em;
+      }
+    }
+  }
+
+  .userChat {
+    border: 2px solid red;
+    align-self: flex-start;
+  }
+  .adminChat {
+    border: 2px solid black;
+    align-self: flex-end;
+  }
+
+  form {
+    padding: 0.5em;
+    background-color: aliceblue;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .inquiriesContainer {
     padding: 0 0.2em;
