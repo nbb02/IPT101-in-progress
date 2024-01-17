@@ -25,26 +25,31 @@ function Orders() {
   const totalPrice = !isEmpty ? subTotal + deliveryFee : 0
 
   async function checkOut() {
-    const date = new Date()
-    const transaction = {
-      id: Date.now(),
-      deliveryInfo,
-      status: "Processing",
-      orderDate: date.toLocaleString(),
-      subTotal,
-      deliveryFee,
-      totalPrice,
-      cart,
-    }
+    if (deliveryInfo) {
+      const date = new Date()
+      const transaction = {
+        id: Date.now(),
+        deliveryInfo: {
+          ...deliveryInfo,
+          uid: auth.currentUser.uid,
+        },
+        status: "Processing",
+        orderDate: date.toLocaleString(),
+        subTotal,
+        deliveryFee,
+        totalPrice,
+        cart,
+      }
 
-    await setDoc(
-      doc(db, "transactions", auth.currentUser.uid),
-      {
-        transactions: arrayUnion(transaction),
-      },
-      { merge: true }
-    )
-    await deleteDoc(doc(db, "cartItems", auth.currentUser.uid))
+      await setDoc(
+        doc(db, "transactions", auth.currentUser.uid),
+        {
+          transactions: arrayUnion(transaction),
+        },
+        { merge: true }
+      )
+      await deleteDoc(doc(db, "cartItems", auth.currentUser.uid))
+    }
   }
 
   useEffect(() => {

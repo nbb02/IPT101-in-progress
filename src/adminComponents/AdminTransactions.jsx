@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react"
 import styles from "../PagesStyles/AdminTransactions.module.scss"
 import { db } from "../Context/Firebase"
-import { collection, onSnapshot } from "firebase/firestore"
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore"
 
 function AdminTransactions() {
   const [transactions, setTransactions] = useState([])
 
   const [filteredTransactions, setFilteredTransactions] = useState([])
   const [transactionData, setTransactionData] = useState()
+  const [eachTransaction, setEachTransaction] = useState()
 
   function filterTransactions() {
     const toPay = []
@@ -19,13 +26,15 @@ function AdminTransactions() {
     transactions?.forEach((users) => {
       users?.transactions?.map((transaction) => {
         const { status } = transaction
-        if (status === "To Pay") toPay.push(transaction)
+        if (status == +"To Pay") toPay.push(transaction)
         else if (status === "Processing") processing.push(transaction)
         else if (status === "Completed") completed.push(transaction)
         else if (status === "Cancelled") cancelled.push(transaction)
         else unknown.push(transaction)
       })
     })
+    console.log(processing)
+    console.log(unknown)
     setFilteredTransactions({
       toPay,
       processing,
@@ -37,9 +46,8 @@ function AdminTransactions() {
 
   function TransactionSubComponent({ data }) {
     const { status, date, cart, totalPrice } = data
-    console.log(data)
     return (
-      <div>
+      <div onClick={() => setEachTransaction(data)}>
         <p>Status : {status}</p>
         <p>Order Date : {date}</p>
         <div>
@@ -52,6 +60,87 @@ function AdminTransactions() {
           {cart.length} {cart.length > 1 ? "items" : "item"}
         </p>
         <p>{totalPrice}</p>
+      </div>
+    )
+  }
+
+  function FoodComponents({ data }) {
+    const { id, img, name, price, quantity } = data
+    return (
+      <div>
+        <p>{name}</p>
+        {img && <img src={img} />}
+        <p>{price}</p>
+        <p>{quantity}</p>
+      </div>
+    )
+  }
+
+  async function changeOrderStatus(userId, transactionId, statusToSet) {
+    const docRef = doc(db, "transactions", userId)
+    const docSnap = await getDoc(docRef)
+
+    const statusData = []
+
+    if (docSnap.exists()) {
+      statusData.push(docSnap.data())
+
+      const updatedStatus = statusData.map((item) => {
+        return item.id === transactionId
+          ? { ...item, status: statusToSet }
+          : item
+      })
+      await updateDoc(docRef, { transactions: updatedStatus })
+      filterTransactions()
+      setEachTransaction(
+        filteredTransactions.find((item) => item.id === transactionId)
+      )
+    }
+  }
+
+  function EachTransactionComponent({ data }) {
+    const {
+      deliveryInfo,
+      cart,
+      deliveryFee,
+      orderDate,
+      status,
+      subTotal,
+      id,
+      totalPrice,
+    } = data
+    const { username, address, uid } = deliveryInfo
+
+    let statusToSet
+
+    if (status === "To Pay") statusToSet = "Processing"
+    else if (status === "Processing") statusToSet = "Completed"
+    else if (status === "Cancelled") statusToSet = "Cancelled"
+    else statusToSet = "Unknown"
+
+    return (
+      <div className={styles.eachTransactionComponent}>
+        <p>{username}</p>
+        <p>{address}</p>
+        {cart &&
+          cart?.map((item) => <FoodComponents data={item} key={item.id} />)}
+        <p>{orderDate}</p>
+        <p>{status}</p>
+        <p>{subTotal}</p>
+        <p>{deliveryFee}</p>
+        <p>{totalPrice}</p>
+        {(status != "Completed" ||
+          status != "Cancelled" ||
+          status != "Unknown") && (
+          <>
+            <button onClick={() => changeOrderStatus(uid, id, statusToSet)}>
+              {statusToSet}?
+            </button>
+            <button onClick={() => changeOrderStatus(uid, id, "Cancelled")}>
+              Cancel?
+            </button>
+          </>
+        )}
       </div>
     )
   }
@@ -109,10 +198,20 @@ function AdminTransactions() {
           <button onClick={() => setTransactionData()}>Close</button>
           {transactionData.length !== 0 ? (
             transactionData.map((item) => (
-              <TransactionSubComponent data={item} />
+              <TransactionSubComponent data={item} key={Date.now()} />
             ))
           ) : (
             <h1>No Transactions</h1>
+          )}
+        </div>
+      )}
+      {eachTransaction && (
+        <div>
+          <button onClick={() => setEachTransaction()}>Close</button>
+          {eachTransaction ? (
+            <EachTransactionComponent data={eachTransaction} />
+          ) : (
+            <h1>Error</h1>
           )}
         </div>
       )}

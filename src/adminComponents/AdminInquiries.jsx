@@ -34,19 +34,19 @@ function AdminInquiries() {
     })
   }
 
-  useEffect(() => {
-    const inquiryDataSnapshot = () => {
-      onSnapshot(collection(db, "inquiryData"), (snapshot) => {
-        const inquiries = []
-        snapshot.forEach((doc) => {
-          inquiries.push(doc.data())
-        })
-        setInquiryData(inquiries)
-      })
-    }
+  // useEffect(() => {
+  //   const inquiryDataSnapshot = () => {
+  //     onSnapshot(collection(db, "inquiryData"), (snapshot) => {
+  //       const inquiries = []
+  //       snapshot.forEach((doc) => {
+  //         inquiries.push(doc.data())
+  //       })
+  //       setInquiryData(inquiries)
+  //     })
+  //   }
 
-    return inquiryDataSnapshot()
-  }, [])
+  //   return inquiryDataSnapshot()
+  // }, [])
 
   const [reply, setReply] = useState({ message: "" })
 
