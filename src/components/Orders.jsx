@@ -29,7 +29,7 @@ function Orders() {
     const transaction = {
       id: Date.now(),
       deliveryInfo,
-      status: "To Process",
+      status: "Processing",
       orderDate: date.toLocaleString(),
       subTotal,
       deliveryFee,

@@ -7,37 +7,53 @@ function AdminTransactions() {
   const [transactions, setTransactions] = useState([])
 
   const [filteredTransactions, setFilteredTransactions] = useState([])
+  const [transactionData, setTransactionData] = useState()
 
   function filterTransactions() {
     const toPay = []
     const processing = []
-    const commpleted = []
+    const completed = []
     const cancelled = []
     const unknown = []
 
-    transactions?.map((users) => {
+    transactions?.forEach((users) => {
       users?.transactions?.map((transaction) => {
-        switch (transaction.status) {
-          case "to Pay":
-            toPay.push(transaction)
-          case "processing":
-            processing.push(transaction)
-          case "completed":
-            commpleted.push(transaction)
-          case "cancelled":
-            cancelled.push(transaction)
-          default:
-            unknown.push(transaction)
-        }
+        const { status } = transaction
+        if (status === "To Pay") toPay.push(transaction)
+        else if (status === "Processing") processing.push(transaction)
+        else if (status === "Completed") completed.push(transaction)
+        else if (status === "Cancelled") cancelled.push(transaction)
+        else unknown.push(transaction)
       })
     })
     setFilteredTransactions({
       toPay,
       processing,
-      commpleted,
+      completed,
       cancelled,
       unknown,
     })
+  }
+
+  function TransactionSubComponent({ data }) {
+    const { status, date, cart, totalPrice } = data
+    console.log(data)
+    return (
+      <div>
+        <p>Status : {status}</p>
+        <p>Order Date : {date}</p>
+        <div>
+          <img src={cart[0].img} alt="" height={50} />
+          <p>{cart[0].name}</p>
+          <p>{cart[0].quantity}</p>
+          <p>{cart[0].price}</p>
+        </div>
+        <p>
+          {cart.length} {cart.length > 1 ? "items" : "item"}
+        </p>
+        <p>{totalPrice}</p>
+      </div>
+    )
   }
 
   useEffect(() => {
@@ -64,38 +80,42 @@ function AdminTransactions() {
         <h6>ADMIN</h6>
       </div>
       <div>
-        <div>
-          <h2>To Pay</h2>
-          <div></div>
-        </div>
-        <div>
-          <h2>Processing</h2>
-          <div></div>
-        </div>
-        <div>
-          <h2>Completed</h2>
-          <div></div>
-        </div>
-        <div>
-          <h2>Cancelled</h2>
-          <div></div>
-        </div>
-        <div>
-          <h2>Unknown</h2>
-          <div>
-            {filteredTransactions &&
-              filteredTransactions?.unknown?.map((item, index) => {
-                const { status, orderDate } = item
-                return (
-                  <div key={index}>
-                    <p>{status}</p>
-                    <p>{orderDate}</p>
-                  </div>
-                )
-              })}
-          </div>
-        </div>
+        <button onClick={() => setTransactionData(filteredTransactions.toPay)}>
+          To Pay
+        </button>
+        <button
+          onClick={() => setTransactionData(filteredTransactions.processing)}
+        >
+          Processing
+        </button>
+        <button
+          onClick={() => setTransactionData(filteredTransactions.completed)}
+        >
+          Completed
+        </button>
+        <button
+          onClick={() => setTransactionData(filteredTransactions.cancelled)}
+        >
+          Cancelled
+        </button>
+        <button
+          onClick={() => setTransactionData(filteredTransactions.unknown)}
+        >
+          Unknown
+        </button>
       </div>
+      {transactionData && (
+        <div>
+          <button onClick={() => setTransactionData()}>Close</button>
+          {transactionData.length !== 0 ? (
+            transactionData.map((item) => (
+              <TransactionSubComponent data={item} />
+            ))
+          ) : (
+            <h1>No Transactions</h1>
+          )}
+        </div>
+      )}
     </div>
   )
 }
